@@ -801,6 +801,100 @@ export const SEED_TOOLS: Tool[] = [
       "Overwolf overlay. Install only from Overwolf or the official ValoHunt site.",
     featured: false,
   },
+  {
+    id: "tricks-gg",
+    name: "Tricks.gg",
+    slug: "tricks-gg",
+    shortDescription:
+      "Lineups, agent setups, crosshairs and strategies in one place.",
+    description:
+      "Tricks.gg bills itself as \u201cValorant Lineups, Setups, Crosshairs, Strategies & Replay Tool\u201d. Lineups are browsable by map with step-by-step positioning, and the same site carries agent setups, crosshair codes and a replay tool \u2014 useful if you would rather not keep four tabs open.",
+    websiteUrl: "https://tricks.gg",
+    category: "Lineups & Strategies",
+    tags: ["lineups", "setups", "strategies", "replay"],
+    platforms: ["web"],
+    pricing: "free",
+    status: "active",
+    lastVerified: "2026-08-24",
+    features: [
+      "Lineups browsable by map",
+      "Agent setups and strategies",
+      "Crosshair codes alongside the lineups",
+      "Replay tool",
+    ],
+    featured: false,
+  },
+  {
+    id: "brimmate",
+    name: "BrimMate",
+    slug: "brimmate",
+    shortDescription:
+      "Interactive tactical map guides for ability lineups.",
+    description:
+      "BrimMate is lineup-only and map-first: pick a map and an agent, and the lineups are laid out on an interactive tactical map rather than as a video list. Covers Brimstone, Sova, Viper and Vyse across the current map pool, with community submissions.",
+    websiteUrl: "https://brimmate.xyz",
+    category: "Lineups & Strategies",
+    tags: ["lineups", "interactive-map", "brimstone", "sova", "viper"],
+    platforms: ["web"],
+    pricing: "free",
+    status: "active",
+    lastVerified: "2026-08-24",
+    features: [
+      "Interactive tactical map per lineup",
+      "Brimstone, Sova, Viper and Vyse coverage",
+      "Filter by map and ability",
+      "Community-submitted lineups",
+    ],
+    featured: false,
+  },
+  {
+    id: "ascend-crosshairs",
+    name: "Ascend Crosshairs",
+    slug: "ascend-crosshairs",
+    shortDescription:
+      "Verified VCT pro crosshair codes, refreshed every patch.",
+    description:
+      "Ascend\u2019s crosshair gallery lists verified codes from VCT professionals \u2014 TenZ, Aspas, Demon1, Boaster, ScreaM and others \u2014 with a live preview, one-click copy, and the source and last-updated date shown per entry. Codes are refreshed each patch, which is what separates it from the many stale pro-crosshair lists.",
+    websiteUrl: "https://www.play-ascend.com/crosshairs",
+    category: "Crosshairs & Settings",
+    tags: ["crosshair", "pro-settings", "vct", "verified"],
+    platforms: ["web"],
+    pricing: "free",
+    status: "active",
+    lastVerified: "2026-08-24",
+    features: [
+      "154 verified VCT pro crosshairs",
+      "Source and last-updated date per code",
+      "Live preview before importing",
+      "Team-by-team crosshair pages",
+    ],
+    safetyNotes:
+      "The crosshair gallery is free and needs no account. The wider Ascend platform has optional paid features.",
+    featured: false,
+  },
+  {
+    id: "valdb",
+    name: "VALDB",
+    slug: "valdb",
+    shortDescription:
+      "Crosshair database and generator with pro player codes.",
+    description:
+      "VALDB pairs a browsable database of professional crosshair codes with a generator for building your own, plus written guides on what the individual crosshair settings actually do. Free, no account, and codes copy straight into the game.",
+    websiteUrl: "https://valdb.com",
+    category: "Crosshairs & Settings",
+    tags: ["crosshair", "generator", "pro-settings", "guides"],
+    platforms: ["web"],
+    pricing: "free",
+    status: "active",
+    lastVerified: "2026-08-24",
+    features: [
+      "Pro player crosshair codes",
+      "Custom crosshair generator",
+      "Guides on individual crosshair settings",
+      "Copy and import directly",
+    ],
+    featured: false,
+  },
 ];
 
 export function getApprovedTools(): Tool[] {

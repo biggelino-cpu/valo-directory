@@ -21,7 +21,7 @@ export const CATEGORIES: {
   {
     name: "Lineups & Strategies",
     slug: "lineups-strategies",
-    label: "Guides",
+    label: "Lineups",
     blurb: "Ability lineups, whiteboards, playbooks, and executes.",
   },
   {
@@ -33,7 +33,7 @@ export const CATEGORIES: {
   {
     name: "Crosshairs & Settings",
     slug: "crosshairs-settings",
-    label: "Tools",
+    label: "Crosshairs",
     blurb: "Crosshair codes, builders, and sensitivity converters.",
   },
   {
