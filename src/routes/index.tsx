@@ -1,8 +1,9 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { DirectoryList } from "@/components/directory-list";
 import { FilterBar } from "@/components/filter-bar";
-import { FeaturedCard } from "@/components/tool-card";
+import { CategoryTile, FeaturedCard } from "@/components/tool-card";
 import { useSavedTools } from "@/hooks/use-saved";
+import { CATEGORIES } from "@/lib/tools/categories";
 import { mergeCatalog } from "@/lib/tools/catalog";
 import { filterTools, type ToolFilters } from "@/lib/tools/filter";
 import { listApprovedSubmissions } from "@/lib/tools/submissions";
@@ -58,6 +59,13 @@ function Home() {
   const filtering = Boolean(filters.q || filters.category);
   const results = filterTools(catalog, filters);
   const featured = pickFeatured(catalog);
+  const categoryCounts = new Map<Category, number>();
+  for (const tool of catalog) {
+    categoryCounts.set(tool.category, (categoryCounts.get(tool.category) ?? 0) + 1);
+  }
+
+  const clearFilters = () =>
+    onChange({ q: "", category: "", platform: "", pricing: "", status: "" });
 
   const onChange = (next: ToolFilters) => {
     void navigate({
@@ -79,6 +87,24 @@ function Home() {
           projects. Reviewed by hand, no affiliate links.
         </p>
       </section>
+
+      {!filtering ? (
+        <section className="mt-12">
+          <p className="font-label text-primary">Browse by category</p>
+          <div className="mt-4 grid grid-cols-2 gap-px border border-border bg-border sm:grid-cols-4">
+            {CATEGORIES.map((c) => (
+              <CategoryTile
+                key={c.slug}
+                name={c.name}
+                slug={c.slug}
+                blurb={c.blurb}
+                count={categoryCounts.get(c.name) ?? 0}
+                label={c.label}
+              />
+            ))}
+          </div>
+        </section>
+      ) : null}
 
       {!filtering && featured.length > 0 ? (
         <section className="mt-12">
@@ -110,6 +136,8 @@ function Home() {
           tools={results}
           saved={new Set(saved.ids)}
           onToggleSave={saved.toggle}
+          totalCount={catalog.length}
+          onClearFilters={filtering ? clearFilters : undefined}
         />
       </div>
       <div className="flex items-center justify-between border-t border-border px-4 py-6 font-mono text-xs text-muted-foreground">

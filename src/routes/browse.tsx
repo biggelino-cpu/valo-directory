@@ -3,7 +3,12 @@ import { DirectoryList } from "@/components/directory-list";
 import { FilterBar } from "@/components/filter-bar";
 import { useSavedTools } from "@/hooks/use-saved";
 import { mergeCatalog } from "@/lib/tools/catalog";
-import { filterTools, type ToolFilters } from "@/lib/tools/filter";
+import {
+  filterTools,
+  sortTools,
+  type SortOption,
+  type ToolFilters,
+} from "@/lib/tools/filter";
 import { listApprovedSubmissions } from "@/lib/tools/submissions";
 import type { Category, Platform, Pricing, ToolStatus } from "@/lib/tools/types";
 
@@ -13,6 +18,7 @@ type BrowseSearch = {
   platform?: Platform;
   pricing?: Pricing;
   status?: ToolStatus;
+  sort?: SortOption;
 };
 
 export const Route = createFileRoute("/browse")({
@@ -34,6 +40,8 @@ export const Route = createFileRoute("/browse")({
       typeof search.status === "string"
         ? (search.status as ToolStatus)
         : undefined,
+    sort:
+      typeof search.sort === "string" ? (search.sort as SortOption) : undefined,
   }),
   loader: async () => ({ approved: await listApprovedSubmissions() }),
   component: BrowsePage,
@@ -56,8 +64,9 @@ function BrowsePage() {
     pricing: search.pricing ?? "",
     status: search.status ?? "",
   };
+  const sort: SortOption = search.sort ?? "default";
 
-  const results = filterTools(tools, filters);
+  const results = sortTools(filterTools(tools, filters), sort);
 
   const onChange = (next: ToolFilters) => {
     void navigate({
@@ -67,6 +76,20 @@ function BrowsePage() {
         platform: next.platform || undefined,
         pricing: next.pricing || undefined,
         status: next.status || undefined,
+        sort: sort !== "default" ? sort : undefined,
+      },
+    });
+  };
+
+  const onSortChange = (next: SortOption) => {
+    void navigate({
+      search: {
+        q: filters.q || undefined,
+        category: filters.category || undefined,
+        platform: filters.platform || undefined,
+        pricing: filters.pricing || undefined,
+        status: filters.status || undefined,
+        sort: next !== "default" ? next : undefined,
       },
     });
   };
@@ -79,7 +102,13 @@ function BrowsePage() {
         a discovery hub, not a host.
       </p>
       <div className="mt-8">
-        <FilterBar value={filters} onChange={onChange} count={tools.length} />
+        <FilterBar
+          value={filters}
+          onChange={onChange}
+          count={tools.length}
+          sort={sort}
+          onSortChange={onSortChange}
+        />
       </div>
       <p className="mt-8 px-1 font-mono text-xs tabular-nums text-muted-foreground">
         {results.length} of {tools.length}
@@ -89,6 +118,10 @@ function BrowsePage() {
           tools={results}
           saved={new Set(saved.ids)}
           onToggleSave={saved.toggle}
+          totalCount={tools.length}
+          onClearFilters={() =>
+            onChange({ q: "", category: "", platform: "", pricing: "", status: "" })
+          }
         />
       </div>
     </main>

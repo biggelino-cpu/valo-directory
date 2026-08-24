@@ -8,6 +8,24 @@ export type ToolFilters = {
   status?: ToolStatus | "";
 };
 
+export type SortOption = "default" | "newest" | "az";
+
+export const SORT_OPTIONS: { value: SortOption; label: string }[] = [
+  { value: "default", label: "Default" },
+  { value: "newest", label: "Newest" },
+  { value: "az", label: "A–Z" },
+];
+
+export function sortTools(tools: Tool[], sort: SortOption): Tool[] {
+  if (sort === "az") {
+    return [...tools].sort((a, b) => a.name.localeCompare(b.name));
+  }
+  if (sort === "newest") {
+    return [...tools].sort((a, b) => b.lastVerified.localeCompare(a.lastVerified));
+  }
+  return tools;
+}
+
 export function filterTools(tools: Tool[], filters: ToolFilters): Tool[] {
   const q = filters.q?.trim().toLowerCase() ?? "";
   return tools.filter((t) => {
