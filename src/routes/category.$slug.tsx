@@ -5,6 +5,7 @@ import { useSavedTools } from "@/hooks/use-saved";
 import { categoryBySlug } from "@/lib/tools/categories";
 import { mergeCatalog } from "@/lib/tools/catalog";
 import { listApprovedSubmissions } from "@/lib/tools/submissions";
+import { absoluteUrl, breadcrumbs, jsonLd, seo } from "@/lib/seo";
 
 export const Route = createFileRoute("/category/$slug")({
   loader: async ({ params }) => {
@@ -15,15 +16,52 @@ export const Route = createFileRoute("/category/$slug")({
     return { cat, tools };
   },
   component: CategoryPage,
-  head: ({ loaderData }) => ({
-    meta: [
-      {
-        title: loaderData
-          ? `${loaderData.cat.name} — VALO DIRECTORY`
-          : "Category — VALO DIRECTORY",
-      },
-    ],
-  }),
+  head: ({ loaderData }) => {
+    if (!loaderData) {
+      return seo({ title: "Category", description: "Browse a category." });
+    }
+    const { cat, tools } = loaderData;
+    const path = `/category/${cat.slug}`;
+    const { meta, links } = seo({
+      title: `${cat.name} — ${tools.length} Valorant ${
+        tools.length === 1 ? "site" : "sites"
+      }`,
+      description: `${cat.blurb} ${tools.length} hand-reviewed Valorant ${
+        tools.length === 1 ? "site" : "sites"
+      } in this category.`,
+      path,
+    });
+
+    return {
+      meta,
+      links,
+      scripts: [
+        jsonLd({
+          "@context": "https://schema.org",
+          "@type": "CollectionPage",
+          name: cat.name,
+          description: cat.blurb,
+          url: absoluteUrl(path),
+          mainEntity: {
+            "@type": "ItemList",
+            numberOfItems: tools.length,
+            itemListElement: tools.map((tool, i) => ({
+              "@type": "ListItem",
+              position: i + 1,
+              name: tool.name,
+              url: absoluteUrl(`/tools/${tool.slug}`),
+            })),
+          },
+        }),
+        jsonLd(
+          breadcrumbs([
+            { name: "Home", path: "/" },
+            { name: cat.name, path },
+          ]),
+        ),
+      ],
+    };
+  },
   notFoundComponent: () => (
     <main className="mx-auto max-w-7xl flex-1 px-4 py-16">
       <h1 className="font-display text-3xl">Unknown category</h1>

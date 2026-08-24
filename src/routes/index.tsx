@@ -7,6 +7,8 @@ import { CATEGORIES } from "@/lib/tools/categories";
 import { mergeCatalog } from "@/lib/tools/catalog";
 import { filterTools, type ToolFilters } from "@/lib/tools/filter";
 import { listApprovedSubmissions } from "@/lib/tools/submissions";
+import { absoluteUrl, jsonLd, seo, SITE_URL } from "@/lib/seo";
+import { APP_NAME } from "@/lib/brand";
 import type { Category, Tool } from "@/lib/tools/types";
 
 const FEATURED_CAP = 4;
@@ -38,9 +40,39 @@ export const Route = createFileRoute("/")({
   }),
   loader: async () => ({ approved: await listApprovedSubmissions() }),
   component: Home,
-  head: () => ({
-    meta: [{ title: "VALO DIRECTORY — Valorant sites worth your bookmark" }],
-  }),
+  head: () => {
+    const { meta, links } = seo({
+      // Distinct from /browse on purpose: the home page targets discovery
+      // ("what should I use"), /browse targets filtering ("narrow the list").
+      title: "VALO DIRECTORY — Valorant trackers, tools and sites worth a bookmark",
+      description:
+        "A hand-reviewed catalog of Valorant trackers, stat sites, lineup guides, crosshair tools, overlays and Discord bots. Independent, no affiliate links.",
+      path: "/",
+    });
+    return {
+      meta,
+      links,
+      scripts: [
+        jsonLd({
+          "@context": "https://schema.org",
+          "@type": "WebSite",
+          name: APP_NAME,
+          url: SITE_URL,
+          description:
+            "Independent, curated directory of Valorant trackers, lineup sites, overlays, and community tools.",
+          inLanguage: "en",
+          potentialAction: {
+            "@type": "SearchAction",
+            target: {
+              "@type": "EntryPoint",
+              urlTemplate: `${absoluteUrl("/browse")}?q={search_term_string}`,
+            },
+            "query-input": "required name=search_term_string",
+          },
+        }),
+      ],
+    };
+  },
 });
 
 function Home() {

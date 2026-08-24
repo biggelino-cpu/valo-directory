@@ -1,3 +1,4 @@
+import { seo } from "@/lib/seo";
 import { createFileRoute } from "@tanstack/react-router";
 import { Inbox, Lock } from "lucide-react";
 import { useState } from "react";
@@ -13,9 +14,12 @@ import type { Tool } from "@/lib/tools/types";
 
 export const Route = createFileRoute("/review")({
   component: ReviewPage,
-  head: () => ({
-    meta: [{ title: "Review — VALO DIRECTORY" }],
-  }),
+  head: () =>
+    seo({
+      title: "Review",
+      description: "Reviewer-only queue for community submissions.",
+      noindex: true,
+    }),
 });
 
 function ReviewPage() {
