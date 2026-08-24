@@ -1,29 +1,16 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { DirectoryList } from "@/components/directory-list";
 import { FilterBar } from "@/components/filter-bar";
-import { CategoryTile, FeaturedCard } from "@/components/tool-card";
+import { CategoryStrip } from "@/components/category-strip";
+import { SpotlightRow } from "@/components/spotlight-row";
 import { useSavedTools } from "@/hooks/use-saved";
-import { CATEGORIES } from "@/lib/tools/categories";
 import { mergeCatalog } from "@/lib/tools/catalog";
+import { resolveSpotlights } from "@/lib/tools/spotlight";
 import { filterTools, type ToolFilters } from "@/lib/tools/filter";
 import { listApprovedSubmissions } from "@/lib/tools/submissions";
 import { absoluteUrl, jsonLd, seo, SITE_URL } from "@/lib/seo";
 import { APP_NAME } from "@/lib/brand";
-import type { Category, Tool } from "@/lib/tools/types";
-
-const FEATURED_CAP = 4;
-
-function pickFeatured(tools: Tool[]) {
-  const seen = new Set<string>();
-  const out: Tool[] = [];
-  for (const tool of tools) {
-    if (!tool.featured || seen.has(tool.category)) continue;
-    seen.add(tool.category);
-    out.push(tool);
-    if (out.length >= FEATURED_CAP) break;
-  }
-  return out;
-}
+import type { Category } from "@/lib/tools/types";
 
 type HomeSearch = {
   q?: string;
@@ -38,7 +25,15 @@ export const Route = createFileRoute("/")({
         ? (search.category as Category)
         : undefined,
   }),
-  loader: async () => ({ approved: await listApprovedSubmissions() }),
+  loader: async () => {
+    const approved = await listApprovedSubmissions();
+    return {
+      approved,
+      // Resolved here, not in the component: the weekly slot is time-derived,
+      // and a server/client split across a week boundary would mismatch.
+      spotlights: resolveSpotlights(mergeCatalog(approved)),
+    };
+  },
   component: Home,
   head: () => {
     const { meta, links } = seo({
@@ -77,7 +72,7 @@ export const Route = createFileRoute("/")({
 
 function Home() {
   const search = Route.useSearch();
-  const { approved } = Route.useLoaderData();
+  const { approved, spotlights } = Route.useLoaderData();
   const navigate = useNavigate({ from: "/" });
   const saved = useSavedTools();
   const catalog = mergeCatalog(approved);
@@ -90,7 +85,6 @@ function Home() {
   };
   const filtering = Boolean(filters.q || filters.category);
   const results = filterTools(catalog, filters);
-  const featured = pickFeatured(catalog);
   const categoryCounts = new Map<Category, number>();
   for (const tool of catalog) {
     categoryCounts.set(tool.category, (categoryCounts.get(tool.category) ?? 0) + 1);
@@ -109,52 +103,31 @@ function Home() {
   };
 
   return (
-    <main className="mx-auto w-full max-w-7xl flex-1 px-4 py-10 sm:px-6 sm:py-14">
-      <section className="max-w-3xl">
-        <h1 className="font-display text-4xl leading-none sm:text-6xl">
+    <main className="mx-auto w-full max-w-7xl flex-1 px-4 py-6 sm:px-6 sm:py-8">
+      {/* Hero and search share one row: the search is the primary action on a
+          directory and previously sat 1,472px down the page. */}
+      <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:gap-6">
+        <h1 className="font-display text-2xl leading-tight sm:text-3xl lg:whitespace-nowrap">
           Every Valorant site worth your bookmark.
         </h1>
-        <p className="mt-5 max-w-xl text-base text-muted-foreground">
-          {catalog.length} trackers, stat sites, guides, tools and community
-          projects. Reviewed by hand, no affiliate links.
+        <p className="hidden font-mono text-xs text-muted-foreground lg:ml-auto lg:block">
+          {catalog.length} listings · reviewed by hand · no affiliate links
         </p>
-      </section>
+      </div>
 
       {!filtering ? (
-        <section className="mt-12">
-          <p className="font-label text-primary">Browse by category</p>
-          <div className="mt-4 grid grid-cols-2 gap-px border border-border bg-border sm:grid-cols-4">
-            {CATEGORIES.map((c) => (
-              <CategoryTile
-                key={c.slug}
-                name={c.name}
-                slug={c.slug}
-                blurb={c.blurb}
-                count={categoryCounts.get(c.name) ?? 0}
-                label={c.label}
-              />
-            ))}
-          </div>
-        </section>
+        <div className="mt-5">
+          <CategoryStrip counts={categoryCounts} />
+        </div>
       ) : null}
 
-      {!filtering && featured.length > 0 ? (
-        <section className="mt-12">
-          <p className="font-label text-primary">Featured</p>
-          <div className="mt-4 grid gap-4 sm:grid-cols-2">
-            {featured.map((tool) => (
-              <FeaturedCard
-                key={tool.id}
-                tool={tool}
-                saved={saved.has(tool.id)}
-                onToggleSave={saved.toggle}
-              />
-            ))}
-          </div>
-        </section>
+      {!filtering && spotlights.length > 0 ? (
+        <div className="mt-5">
+          <SpotlightRow spotlights={spotlights} />
+        </div>
       ) : null}
 
-      <div className="mt-12">
+      <div className="mt-6">
         <FilterBar
           value={filters}
           onChange={onChange}
@@ -163,7 +136,7 @@ function Home() {
         />
       </div>
 
-      <div className="mt-8">
+      <div className="mt-5">
         <DirectoryList
           tools={results}
           saved={new Set(saved.ids)}

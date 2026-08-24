@@ -50,6 +50,7 @@ export const SEED_TOOLS: Tool[] = [
     safetyNotes:
       "Desktop overlay runs through Overwolf. Free web lookup does not require a download.",
     featured: true,
+    spotlight: "editors",
   },
   {
     id: "blitz-gg",
@@ -123,6 +124,7 @@ export const SEED_TOOLS: Tool[] = [
       "Links through to official Riot patch notes",
     ],
     featured: true,
+    spotlight: "weekly",
   },
   {
     id: "vcrdb",
@@ -146,6 +148,7 @@ export const SEED_TOOLS: Tool[] = [
       "Community tools",
     ],
     featured: true,
+    spotlight: "gem",
   },
   {
     id: "u-gg",
