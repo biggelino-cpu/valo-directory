@@ -19,6 +19,13 @@ export type Category =
   | "Discord Bots & Utilities"
   | "Other";
 
+/**
+ * Home-page spotlight slots. A tool carries at most one; the slots are an
+ * editorial decision, not something derived from the data — lastVerified ties
+ * across most of the catalogue and would not discriminate.
+ */
+export type SpotlightSlot = "editors" | "weekly" | "gem";
+
 export interface Tool {
   id: string;
   name: string;
@@ -35,6 +42,7 @@ export interface Tool {
   features: string[];
   safetyNotes?: string;
   featured: boolean;
+  spotlight?: SpotlightSlot;
   community?: boolean;
   reviewStatus?: "pending" | "approved" | "rejected";
 }
