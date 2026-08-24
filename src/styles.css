@@ -1,0 +1,88 @@
+@import url("https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Space+Mono:wght@400;700&display=swap");
+@import "tailwindcss";
+@import "tw-animate-css";
+
+@theme {
+  --color-background: #0f1923;
+  --color-foreground: #ece8e1;
+  --color-card: #16232e;
+  --color-card-foreground: #ece8e1;
+  --color-muted: #16232e;
+  --color-muted-foreground: #8b978f;
+  --color-border: #1c2b36;
+  --color-input: #24343f;
+  --color-primary: #ff4655;
+  --color-primary-foreground: #0f1923;
+  --color-secondary: #16232e;
+  --color-secondary-foreground: #ece8e1;
+  --color-accent: #ff4655;
+  --color-accent-foreground: #0f1923;
+  --color-ring: #ff4655;
+  --color-destructive: #ff4655;
+  --color-popover: #16232e;
+  --color-popover-foreground: #ece8e1;
+
+  --font-sans: "Space Grotesk", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Space Grotesk", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "Space Mono", ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+
+  --radius-sm: 2px;
+  --radius-md: 0px;
+  --radius-lg: 0px;
+  --radius-xl: 0px;
+  --radius: 0px;
+
+  --text-label: 0.6875rem;
+  --text-label--line-height: 1;
+  --text-label--letter-spacing: 0.14em;
+  --text-index: 0.8125rem;
+  --text-index--line-height: 1;
+}
+
+@layer base {
+  button:not(:disabled),
+  [role="button"]:not(:disabled) {
+    cursor: pointer;
+  }
+
+  html,
+  body {
+    background: var(--color-background);
+    color: var(--color-foreground);
+    font-family: var(--font-sans);
+    font-size: 0.9375rem;
+    line-height: 1.6;
+    min-height: 100%;
+  }
+
+  * {
+    border-color: var(--color-border);
+  }
+
+  a {
+    color: inherit;
+  }
+}
+
+@utility font-display {
+  font-family: var(--font-display);
+  font-weight: 700;
+  letter-spacing: -0.03em;
+}
+
+@utility font-label {
+  font-family: var(--font-mono);
+  font-size: var(--text-label);
+  line-height: 1;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
