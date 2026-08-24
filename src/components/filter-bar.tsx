@@ -24,6 +24,7 @@ export function FilterBar({
   extra = true,
   sort,
   onSortChange,
+  hasRail = false,
 }: {
   value: ToolFilters;
   onChange: (next: ToolFilters) => void;
@@ -31,6 +32,8 @@ export function FilterBar({
   extra?: boolean;
   sort?: SortOption;
   onSortChange?: (next: SortOption) => void;
+  /** The left rail owns category and filter selection at lg and up. */
+  hasRail?: boolean;
 }) {
   const [showMore, setShowMore] = useState(false);
   const set = (patch: Partial<ToolFilters>) => onChange({ ...value, ...patch });
@@ -74,7 +77,12 @@ export function FilterBar({
           </Select>
         ) : null}
       </div>
-      <div className="flex flex-wrap items-center gap-2">
+      <div
+        className={cn(
+          "flex flex-wrap items-center gap-2",
+          hasRail && "lg:hidden",
+        )}
+      >
         <FilterChip
           active={!value.category}
           onClick={() => set({ category: "" })}
@@ -111,7 +119,7 @@ export function FilterBar({
         ) : null}
       </div>
       {extra && showMore ? (
-        <div className="border border-border bg-card p-5">
+        <div className={cn("border border-border bg-card p-5", hasRail && "lg:hidden")}>
           <div className="grid gap-5 sm:grid-cols-3">
             <FilterGroup label="Platform">
               {PLATFORM_OPTIONS.map((p) => (
@@ -164,7 +172,7 @@ export function FilterBar({
           type="button"
           variant="ghost"
           size="sm"
-          className="self-start font-label"
+          className={cn("self-start font-label", hasRail && "lg:hidden")}
           onClick={() =>
             onChange({
               q: "",
