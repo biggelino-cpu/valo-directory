@@ -3,12 +3,13 @@ import type { Platform } from "@/lib/tools/types";
 
 /**
  * Absolute origin for canonical URLs, sitemap entries and structured data.
- * VITE_SITE_URL overrides it per environment; the fallback is the production
- * domain, so a missing variable still yields correct canonicals rather than
- * pointing search engines at the deployment alias.
+ * VITE_SITE_URL overrides it per environment; the fallback is the host the
+ * site is actually served from. It must match that host exactly — the apex
+ * 308-redirects to www, so an apex canonical would point every page at a
+ * redirect and contradict the sitemap, which derives its host per request.
  */
 export const SITE_URL = (
-  import.meta.env?.VITE_SITE_URL || "https://valodirectory.com"
+  import.meta.env?.VITE_SITE_URL || "https://www.valodirectory.com"
 ).replace(/\/$/, "");
 
 export function absoluteUrl(path: string): string {
