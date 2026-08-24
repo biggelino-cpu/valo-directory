@@ -8,8 +8,9 @@
   --color-card: #16232e;
   --color-card-foreground: #ece8e1;
   --color-muted: #16232e;
-  --color-muted-foreground: #8b978f;
+  --color-muted-foreground: #9ba8a0;
   --color-border: #1c2b36;
+  --color-border-strong: #44565f;
   --color-input: #24343f;
   --color-primary: #ff4655;
   --color-primary-foreground: #0f1923;
@@ -76,6 +77,15 @@
   line-height: 1;
   letter-spacing: 0.14em;
   text-transform: uppercase;
+}
+
+@utility focus-ring {
+  &:focus-visible {
+    outline: none;
+    box-shadow:
+      0 0 0 2px var(--color-background),
+      0 0 0 4px var(--color-ring);
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {

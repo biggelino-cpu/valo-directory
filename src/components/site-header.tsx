@@ -25,7 +25,7 @@ export function SiteHeader() {
             <Link
               key={item.to}
               to={item.to}
-              className="font-label text-muted-foreground hover:text-foreground"
+              className="font-label focus-ring text-muted-foreground hover:text-foreground"
               activeProps={{ className: "font-label text-foreground" }}
             >
               {item.label}
@@ -33,7 +33,7 @@ export function SiteHeader() {
           ))}
           <Link
             to="/saved"
-            className="font-label text-muted-foreground hover:text-foreground"
+            className="font-label focus-ring text-muted-foreground hover:text-foreground"
           >
             Saved
           </Link>

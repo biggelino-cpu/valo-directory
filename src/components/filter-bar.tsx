@@ -48,7 +48,7 @@ export function FilterBar({
   return (
     <div className="flex flex-col gap-5">
       <div className="flex flex-col gap-3 sm:flex-row">
-        <label className="flex flex-1 max-w-xl items-center gap-3 rounded-sm border border-input bg-card px-4 py-3.5">
+        <label className="flex flex-1 max-w-xl items-center gap-3 rounded-sm border border-border-strong bg-card px-4 py-3.5 transition-colors focus-within:border-primary">
           <span className="font-mono text-sm text-primary">/</span>
           <input
             value={value.q ?? ""}
@@ -96,11 +96,11 @@ export function FilterBar({
           <button
             type="button"
             onClick={() => setShowMore((s) => !s)}
-            className="font-label ml-1 flex items-center gap-2 border border-dashed border-input px-2.5 py-1.5 text-foreground"
+            className="font-label focus-ring ml-1 flex items-center gap-2 border border-dashed border-border-strong px-2.5 py-1.5 text-foreground"
           >
             More filters
             {advancedCount > 0 ? (
-              <span className="grid size-4 place-items-center bg-primary font-mono text-[10px] text-primary-foreground">
+              <span className="font-label grid size-4 place-items-center bg-primary text-primary-foreground">
                 {advancedCount}
               </span>
             ) : null}
@@ -151,7 +151,7 @@ export function FilterBar({
             <button
               type="button"
               onClick={() => set({ platform: "", pricing: "", status: "" })}
-              className="font-label mt-5 flex items-center gap-1.5 border-t border-border pt-4 text-muted-foreground hover:text-foreground"
+              className="font-label focus-ring mt-5 flex items-center gap-1.5 border-t border-border pt-4 text-muted-foreground hover:text-foreground"
             >
               <X className="size-3" />
               Clear these
@@ -206,10 +206,10 @@ function FilterChip({
       type="button"
       onClick={onClick}
       className={cn(
-        "font-label rounded-sm px-2.5 py-1.5",
+        "font-label focus-ring rounded-sm px-2.5 py-1.5 transition-colors",
         active
           ? "bg-primary text-primary-foreground"
-          : "border border-input text-muted-foreground hover:text-foreground",
+          : "border border-border-strong text-muted-foreground hover:text-foreground",
       )}
     >
       {children}
