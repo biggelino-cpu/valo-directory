@@ -96,7 +96,7 @@ export function FilterBar({
           <button
             type="button"
             onClick={() => setShowMore((s) => !s)}
-            className="font-label focus-ring ml-1 flex items-center gap-2 border border-dashed border-border-strong px-2.5 py-1.5 text-foreground"
+            className="font-label focus-ring ml-1 inline-flex min-h-9 items-center gap-2 border border-dashed border-border-strong px-3 text-foreground sm:min-h-8"
           >
             More filters
             {advancedCount > 0 ? (
@@ -206,7 +206,7 @@ function FilterChip({
       type="button"
       onClick={onClick}
       className={cn(
-        "font-label focus-ring rounded-sm px-2.5 py-1.5 transition-colors",
+        "font-label focus-ring inline-flex min-h-9 items-center rounded-sm px-3 transition-colors sm:min-h-8",
         active
           ? "bg-primary text-primary-foreground"
           : "border border-border-strong text-muted-foreground hover:text-foreground",

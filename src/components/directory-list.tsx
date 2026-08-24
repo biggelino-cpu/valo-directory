@@ -114,7 +114,7 @@ export function DirectoryList({
                       type="button"
                       variant="ghost"
                       size="icon"
-                      className="size-8"
+                      className="size-10 sm:size-8"
                       aria-label={isSaved ? "Remove from saved" : "Save"}
                       onClick={() => onToggleSave(tool.id)}
                     >
@@ -130,7 +130,7 @@ export function DirectoryList({
                     href={tool.websiteUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="focus-ring grid size-8 place-items-center text-muted-foreground group-hover:text-primary"
+                    className="focus-ring grid size-10 place-items-center text-muted-foreground group-hover:text-primary sm:size-8"
                     aria-label={`Visit ${tool.name}`}
                   >
                     <ArrowUpRight className="size-4" />
