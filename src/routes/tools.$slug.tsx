@@ -7,9 +7,10 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
 import { useSavedTools } from "@/hooks/use-saved";
-import { categorySlug } from "@/lib/tools/categories";
 import { mergeCatalog } from "@/lib/tools/catalog";
 import { formatVerifiedDate } from "@/lib/tools/format";
+import { absoluteUrl, breadcrumbs, jsonLd, platformLabel, seo } from "@/lib/seo";
+import { categoryLabel, categorySlug } from "@/lib/tools/categories";
 import { getToolBySlug } from "@/lib/tools/seed";
 import {
   getSubmissionBySlug,
@@ -33,15 +34,53 @@ export const Route = createFileRoute("/tools/$slug")({
     return { tool, related };
   },
   component: ToolDetail,
-  head: ({ loaderData }) => ({
-    meta: [
-      {
-        title: loaderData
-          ? `${loaderData.tool.name} — VALO DIRECTORY`
-          : "Tool — VALO DIRECTORY",
-      },
-    ],
-  }),
+  head: ({ loaderData }) => {
+    const tool = loaderData?.tool;
+    if (!tool) return seo({ title: "Tool", description: "Listing details." });
+
+    const path = `/tools/${tool.slug}`;
+    const { meta, links } = seo({
+      title: `${tool.name} — ${categoryLabel(tool.category)}`,
+      description: tool.shortDescription,
+      path,
+      // A listing awaiting review is not part of the public catalog yet.
+      noindex: tool.reviewStatus === "pending",
+    });
+
+    return {
+      meta,
+      links,
+      scripts: [
+        jsonLd({
+          "@context": "https://schema.org",
+          "@type": "SoftwareApplication",
+          name: tool.name,
+          description: tool.description || tool.shortDescription,
+          url: tool.websiteUrl,
+          mainEntityOfPage: absoluteUrl(path),
+          applicationCategory: "GameApplication",
+          about: { "@type": "VideoGame", name: "VALORANT" },
+          operatingSystem: tool.platforms.map(platformLabel).join(", "),
+          ...(tool.pricing === "free"
+            ? {
+                offers: {
+                  "@type": "Offer",
+                  price: 0,
+                  priceCurrency: "USD",
+                },
+              }
+            : {}),
+        }),
+        jsonLd(
+          breadcrumbs([
+            { name: "Home", path: "/" },
+            { name: tool.category, path: `/category/${categorySlug(tool.category)}` },
+            { name: tool.name, path },
+          ]),
+        ),
+      ],
+    };
+  },
   notFoundComponent: () => (
     <main className="mx-auto max-w-7xl flex-1 px-4 py-16">
       <h1 className="font-display text-3xl">Tool not found</h1>

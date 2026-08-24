@@ -1,11 +1,16 @@
+import { seo } from "@/lib/seo";
 import { createFileRoute } from "@tanstack/react-router";
 import { DISCLAIMER } from "@/lib/brand";
 
 export const Route = createFileRoute("/about")({
   component: AboutPage,
-  head: () => ({
-    meta: [{ title: "About — VALO DIRECTORY" }],
-  }),
+  head: () =>
+    seo({
+      title: "About",
+      description:
+        "How VALO DIRECTORY picks and verifies listings: an independent, community-run catalog that links out to Valorant tools rather than hosting them.",
+      path: "/about",
+    }),
 });
 
 function AboutPage() {

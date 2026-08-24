@@ -20,14 +20,19 @@ import {
   type SubmitField,
 } from "@/lib/tools/submit-schema";
 import { DISCLAIMER } from "@/lib/brand";
+import { seo } from "@/lib/seo";
 import type { Category, Platform, Pricing } from "@/lib/tools/types";
 import { PLATFORM_OPTIONS, PRICING_OPTIONS } from "@/lib/tools/types";
 
 export const Route = createFileRoute("/submit")({
   component: SubmitPage,
-  head: () => ({
-    meta: [{ title: "Submit a site — VALO DIRECTORY" }],
-  }),
+  head: () =>
+    seo({
+      title: "Submit a Valorant site or tool",
+      description:
+        "Suggest a Valorant tracker, lineup site, overlay, bot or utility for the directory. No account needed; a reviewer checks every submission before it appears.",
+      path: "/submit",
+    }),
 });
 
 function SubmitPage() {

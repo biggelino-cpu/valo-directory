@@ -10,6 +10,7 @@ import {
   type ToolFilters,
 } from "@/lib/tools/filter";
 import { listApprovedSubmissions } from "@/lib/tools/submissions";
+import { seo } from "@/lib/seo";
 import type { Category, Platform, Pricing, ToolStatus } from "@/lib/tools/types";
 
 type BrowseSearch = {
@@ -45,9 +46,14 @@ export const Route = createFileRoute("/browse")({
   }),
   loader: async () => ({ approved: await listApprovedSubmissions() }),
   component: BrowsePage,
-  head: () => ({
-    meta: [{ title: "Browse — VALO DIRECTORY" }],
-  }),
+  head: () =>
+    seo({
+      // Utility/filtering intent, kept clear of the home page's discovery intent.
+      title: "Browse Valorant tools by category, platform and pricing",
+      description:
+        "Filter every listed Valorant tool by category, platform, pricing and upkeep status — trackers, lineup sites, overlays, crosshair tools and Discord bots.",
+      path: "/browse",
+    }),
 });
 
 function BrowsePage() {

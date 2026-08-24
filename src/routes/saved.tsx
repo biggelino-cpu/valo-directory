@@ -1,3 +1,4 @@
+import { seo } from "@/lib/seo";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useMemo } from "react";
 import { DirectoryList } from "@/components/directory-list";
@@ -9,9 +10,12 @@ import { listApprovedSubmissions } from "@/lib/tools/submissions";
 export const Route = createFileRoute("/saved")({
   loader: async () => ({ approved: await listApprovedSubmissions() }),
   component: SavedPage,
-  head: () => ({
-    meta: [{ title: "Saved — VALO DIRECTORY" }],
-  }),
+  head: () =>
+    seo({
+      title: "Saved",
+      description: "Your saved Valorant tools, stored in this browser only.",
+      noindex: true,
+    }),
 });
 
 function SavedPage() {
