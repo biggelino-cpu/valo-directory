@@ -3,11 +3,12 @@ import type { Platform } from "@/lib/tools/types";
 
 /**
  * Absolute origin for canonical URLs, sitemap entries and structured data.
- * Set VITE_SITE_URL in the deploy environment; the fallback only keeps local
- * builds coherent and is not a claim about where the site actually lives.
+ * VITE_SITE_URL overrides it per environment; the fallback is the production
+ * domain, so a missing variable still yields correct canonicals rather than
+ * pointing search engines at the deployment alias.
  */
 export const SITE_URL = (
-  import.meta.env?.VITE_SITE_URL || "https://valo-directory.vercel.app"
+  import.meta.env?.VITE_SITE_URL || "https://valodirectory.com"
 ).replace(/\/$/, "");
 
 export function absoluteUrl(path: string): string {
