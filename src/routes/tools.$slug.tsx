@@ -9,6 +9,7 @@ import { Separator } from "@/components/ui/separator";
 import { useSavedTools } from "@/hooks/use-saved";
 import { categorySlug } from "@/lib/tools/categories";
 import { mergeCatalog } from "@/lib/tools/catalog";
+import { formatVerifiedDate } from "@/lib/tools/format";
 import { getToolBySlug } from "@/lib/tools/seed";
 import {
   getSubmissionBySlug,
@@ -164,7 +165,7 @@ function ToolDetail() {
           <dl className="mt-4 space-y-3 text-sm">
             <div>
               <dt className="text-muted-foreground">Last verified</dt>
-              <dd className="tabular-nums">{tool.lastVerified}</dd>
+              <dd className="tabular-nums">{formatVerifiedDate(tool.lastVerified)}</dd>
             </div>
             <div>
               <dt className="text-muted-foreground">Status</dt>

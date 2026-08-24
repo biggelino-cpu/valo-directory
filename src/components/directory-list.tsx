@@ -1,5 +1,6 @@
 import { Link } from "@tanstack/react-router";
-import { ArrowUpRight, Bookmark } from "lucide-react";
+import { ArrowUpRight, Bookmark, SearchX, X } from "lucide-react";
+import { SiteIcon, VerifiedBadge } from "@/components/site-meta";
 import { categoryLabel, categorySlug } from "@/lib/tools/categories";
 import type { Tool } from "@/lib/tools/types";
 import { cn } from "@/lib/utils";
@@ -14,24 +15,48 @@ export function DirectoryList({
   saved,
   onToggleSave,
   start = 1,
+  totalCount,
+  onClearFilters,
 }: {
   tools: Tool[];
   saved?: Set<string>;
   onToggleSave?: (id: string) => void;
   start?: number;
+  totalCount?: number;
+  onClearFilters?: () => void;
 }) {
   if (tools.length === 0) {
     return (
-      <p className="border-t border-border px-1 py-10 text-muted-foreground">
-        No sites match those filters.
-      </p>
+      <div className="flex flex-col items-center gap-5 border-t border-border px-4 py-16 text-center">
+        <span className="grid size-14 place-items-center border border-input text-muted-foreground">
+          <SearchX className="size-6" />
+        </span>
+        <div>
+          <p className="font-medium text-foreground">
+            No sites match those filters.
+          </p>
+          <p className="mt-1.5 text-sm text-muted-foreground">
+            Try a broader search or drop a filter
+            {typeof totalCount === "number"
+              ? ` — ${totalCount} sites are listed in total.`
+              : "."}
+          </p>
+        </div>
+        {onClearFilters ? (
+          <Button type="button" variant="outline" size="sm" onClick={onClearFilters}>
+            <X className="size-3.5" />
+            Clear filters
+          </Button>
+        ) : null}
+      </div>
     );
   }
 
   return (
     <div className="border-t border-border">
-      <div className="hidden grid-cols-[2.75rem_minmax(0,1fr)_9rem_5.5rem_2.5rem] gap-5 bg-card px-4 py-3 font-label text-muted-foreground md:grid">
+      <div className="hidden grid-cols-[2.75rem_1.75rem_minmax(0,1fr)_9rem_7rem_2.5rem] gap-4 bg-card px-4 py-3 font-label text-muted-foreground md:grid">
         <span>#</span>
+        <span />
         <span>Site</span>
         <span>Category</span>
         <span>Access</span>
@@ -46,10 +71,15 @@ export function DirectoryList({
               key={tool.id}
               className="group border-t border-border transition-colors hover:bg-card"
             >
-              <div className="grid grid-cols-[2.75rem_minmax(0,1fr)_auto] items-center gap-3 px-4 py-5 md:grid-cols-[2.75rem_minmax(0,1fr)_9rem_5.5rem_2.5rem] md:gap-5">
+              <div className="grid grid-cols-[2.75rem_minmax(0,1fr)_auto] items-center gap-3 px-4 py-5 md:grid-cols-[2.75rem_1.75rem_minmax(0,1fr)_9rem_7rem_2.5rem] md:gap-4">
                 <span className="font-mono text-index tabular-nums text-muted-foreground group-hover:text-primary">
                   {padIndex(n)}
                 </span>
+                <SiteIcon
+                  name={tool.name}
+                  websiteUrl={tool.websiteUrl}
+                  className="hidden size-7 text-xs md:grid"
+                />
                 <Link
                   to="/tools/$slug"
                   params={{ slug: tool.slug }}
@@ -72,9 +102,12 @@ export function DirectoryList({
                 >
                   {categoryLabel(tool.category)}
                 </Link>
-                <span className="hidden font-mono text-xs text-muted-foreground md:block">
-                  {tool.pricing}
-                </span>
+                <div className="hidden flex-col items-start gap-1 md:flex">
+                  <span className="font-mono text-xs text-muted-foreground">
+                    {tool.pricing}
+                  </span>
+                  <VerifiedBadge date={tool.lastVerified} compact />
+                </div>
                 <div className="flex items-center justify-end gap-1">
                   {onToggleSave ? (
                     <Button

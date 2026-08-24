@@ -1,10 +1,34 @@
 import { Link } from "@tanstack/react-router";
-import { ArrowUpRight, Bookmark } from "lucide-react";
+import {
+  ArrowUpRight,
+  Bookmark,
+  BarChart3,
+  Bot,
+  Crosshair,
+  MonitorPlay,
+  MoreHorizontal,
+  ShoppingBag,
+  SquareLibrary,
+  Trophy,
+  type LucideIcon,
+} from "lucide-react";
+import { SiteIcon, VerifiedBadge } from "@/components/site-meta";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { categoryLabel, categorySlug } from "@/lib/tools/categories";
-import type { Tool } from "@/lib/tools/types";
+import type { Category, Tool } from "@/lib/tools/types";
 import { cn } from "@/lib/utils";
+
+const CATEGORY_ICONS: Record<Category, LucideIcon> = {
+  "Trackers & Stats": BarChart3,
+  "Esports & Competitive": Trophy,
+  "Lineups & Strategies": SquareLibrary,
+  "Store, Inventory & Skins": ShoppingBag,
+  "Crosshairs & Settings": Crosshair,
+  "Overlays & Desktop Apps": MonitorPlay,
+  "Discord Bots & Utilities": Bot,
+  Other: MoreHorizontal,
+};
 
 export function ToolCard({
   tool,
@@ -15,14 +39,15 @@ export function ToolCard({
   saved?: boolean;
   onToggleSave?: (id: string) => void;
 }) {
-  const initial = tool.name.slice(0, 1).toUpperCase();
   return (
     <Card className="group relative flex h-full flex-col">
       <CardContent className="flex h-full flex-col gap-5 p-5">
         <div className="flex items-start justify-between gap-3">
-          <span className="grid size-10 place-items-center border border-border font-mono text-sm text-muted-foreground">
-            {initial}
-          </span>
+          <SiteIcon
+            name={tool.name}
+            websiteUrl={tool.websiteUrl}
+            className="size-10 text-sm"
+          />
           <span className="font-label text-primary">
             {categoryLabel(tool.category)}
           </span>
@@ -38,6 +63,7 @@ export function ToolCard({
           <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
             {tool.shortDescription}
           </p>
+          <VerifiedBadge date={tool.lastVerified} className="mt-3" />
         </div>
         <div className="mt-auto flex items-center justify-between border-t border-border pt-3 font-mono text-xs text-muted-foreground">
           <span>
@@ -85,14 +111,15 @@ export function FeaturedCard({
   saved?: boolean;
   onToggleSave?: (id: string) => void;
 }) {
-  const initial = tool.name.slice(0, 1).toUpperCase();
   return (
     <Card className="group flex h-full flex-col">
       <CardContent className="flex h-full flex-col gap-6 p-6 sm:p-8">
         <div className="flex items-start justify-between gap-3">
-          <span className="grid size-12 place-items-center border border-input font-mono text-lg text-muted-foreground">
-            {initial}
-          </span>
+          <SiteIcon
+            name={tool.name}
+            websiteUrl={tool.websiteUrl}
+            className="size-12 text-lg"
+          />
           <span className="font-label text-primary">
             {categoryLabel(tool.category)}
           </span>
@@ -108,6 +135,7 @@ export function FeaturedCard({
           <p className="mt-3 max-w-prose text-base leading-relaxed text-muted-foreground">
             {tool.shortDescription}
           </p>
+          <VerifiedBadge date={tool.lastVerified} className="mt-4" />
         </div>
         <div className="mt-auto flex items-center justify-between border-t border-border pt-4">
           <span className="font-mono text-xs text-muted-foreground">
@@ -156,25 +184,33 @@ export function CategoryTile({
   count,
   label,
 }: {
-  name: string;
+  name: Category;
   slug: string;
   blurb: string;
   count: number;
   label?: string;
 }) {
+  const Icon = CATEGORY_ICONS[name];
   return (
     <Link
       to="/category/$slug"
       params={{ slug }}
-      className="block border border-border bg-card p-5 transition-colors hover:border-primary/50"
+      className="group flex flex-col gap-8 border border-border bg-background p-5 transition-colors hover:border-primary/50"
     >
-      <div className="flex items-baseline justify-between gap-3">
-        <h3 className="font-display text-lg">{label ?? name}</h3>
+      <div className="flex items-start justify-between">
+        <Icon className="size-[18px] text-primary" />
         <span className="font-mono text-xs tabular-nums text-muted-foreground">
           {count}
         </span>
       </div>
-      <p className="mt-2 text-sm text-muted-foreground">{blurb}</p>
+      <div>
+        <h3 className="font-display text-base group-hover:text-primary">
+          {label ?? name}
+        </h3>
+        <p className="mt-1.5 text-xs leading-relaxed text-muted-foreground">
+          {blurb}
+        </p>
+      </div>
     </Link>
   );
 }
