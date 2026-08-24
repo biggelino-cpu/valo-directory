@@ -33,7 +33,7 @@ export const CATEGORIES: {
   {
     name: "Crosshairs & Settings",
     slug: "crosshairs-settings",
-    label: "Crosshairs",
+    label: "Aim",
     blurb: "Crosshair codes, builders, and sensitivity converters.",
   },
   {
