@@ -13,7 +13,15 @@ import { DISCLAIMER } from "@/lib/brand";
 const NAV = [
   { to: "/browse", label: "Browse" },
   { to: "/about", label: "About" },
+  { to: "/saved", label: "Saved" },
 ];
+
+// Keep the colour out of the base class: TanStack appends activeProps'
+// classes, and two conflicting Tailwind colour utilities resolve by
+// stylesheet order, not class order — so the active one would never win.
+const NAV_LINK = "font-label focus-ring hover:text-foreground";
+const NAV_ACTIVE = { className: "text-foreground" };
+const NAV_INACTIVE = { className: "text-muted-foreground" };
 
 export function SiteHeader() {
   return (
@@ -25,18 +33,13 @@ export function SiteHeader() {
             <Link
               key={item.to}
               to={item.to}
-              className="font-label text-muted-foreground hover:text-foreground"
-              activeProps={{ className: "font-label text-foreground" }}
+              className={NAV_LINK}
+              activeProps={NAV_ACTIVE}
+              inactiveProps={NAV_INACTIVE}
             >
               {item.label}
             </Link>
           ))}
-          <Link
-            to="/saved"
-            className="font-label text-muted-foreground hover:text-foreground"
-          >
-            Saved
-          </Link>
           <Button size="sm" className="font-label" asChild>
             <Link to="/submit">Submit</Link>
           </Button>
@@ -55,14 +58,17 @@ export function SiteHeader() {
                 Home
               </Link>
               {NAV.map((item) => (
-                <Link key={item.to} to={item.to} className="font-label">
+                <Link
+                  key={item.to}
+                  to={item.to}
+                  className="font-label inline-flex items-center gap-2"
+                  activeProps={NAV_ACTIVE}
+                  inactiveProps={NAV_INACTIVE}
+                >
+                  {item.to === "/saved" ? <Bookmark className="size-3.5" /> : null}
                   {item.label}
                 </Link>
               ))}
-              <Link to="/saved" className="font-label inline-flex items-center gap-2">
-                <Bookmark className="size-3.5" />
-                Saved
-              </Link>
               <Button className="mt-2 font-label" asChild>
                 <Link to="/submit">Submit a site</Link>
               </Button>

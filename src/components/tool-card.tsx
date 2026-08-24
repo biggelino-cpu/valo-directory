@@ -48,7 +48,7 @@ export function ToolCard({
             websiteUrl={tool.websiteUrl}
             className="size-10 text-sm"
           />
-          <span className="font-label text-primary">
+          <span className="font-label text-muted-foreground">
             {categoryLabel(tool.category)}
           </span>
         </div>
@@ -56,7 +56,7 @@ export function ToolCard({
           <Link
             to="/tools/$slug"
             params={{ slug: tool.slug }}
-            className="text-xl font-bold tracking-tight text-foreground group-hover:text-primary"
+            className="focus-ring text-xl font-bold tracking-tight text-foreground group-hover:text-primary"
           >
             {tool.name}
           </Link>
@@ -90,7 +90,7 @@ export function ToolCard({
               href={tool.websiteUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="grid size-8 place-items-center text-primary"
+              className="focus-ring grid size-8 place-items-center text-primary"
               aria-label={`Visit ${tool.name}`}
             >
               <ArrowUpRight className="size-4" />
@@ -120,7 +120,7 @@ export function FeaturedCard({
             websiteUrl={tool.websiteUrl}
             className="size-12 text-lg"
           />
-          <span className="font-label text-primary">
+          <span className="font-label text-muted-foreground">
             {categoryLabel(tool.category)}
           </span>
         </div>
@@ -128,7 +128,7 @@ export function FeaturedCard({
           <Link
             to="/tools/$slug"
             params={{ slug: tool.slug }}
-            className="text-2xl font-bold tracking-tight text-foreground sm:text-3xl group-hover:text-primary"
+            className="focus-ring text-2xl font-bold tracking-tight text-foreground sm:text-3xl group-hover:text-primary"
           >
             {tool.name}
           </Link>
@@ -165,7 +165,7 @@ export function FeaturedCard({
               href={tool.websiteUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="grid size-9 place-items-center text-primary"
+              className="focus-ring grid size-9 place-items-center text-primary"
               aria-label={`Visit ${tool.name}`}
             >
               <ArrowUpRight className="size-4" />
@@ -195,7 +195,7 @@ export function CategoryTile({
     <Link
       to="/category/$slug"
       params={{ slug }}
-      className="group flex flex-col gap-8 border border-border bg-background p-5 transition-colors hover:border-primary/50"
+      className="group focus-ring flex flex-col gap-8 border border-border bg-background p-5 transition-colors hover:border-primary/50"
     >
       <div className="flex items-start justify-between">
         <Icon className="size-[18px] text-primary" />

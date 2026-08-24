@@ -64,8 +64,35 @@ export function formatSubmitError(err: unknown): string {
   return "Could not send the listing. Try again in a moment.";
 }
 
-export function validateSubmitInput(data: SubmitInput): string | null {
+export type SubmitField = keyof SubmitInput;
+
+/** The DOM id of the control each field is rendered as, for focus and aria wiring. */
+export const SUBMIT_FIELD_IDS: Record<SubmitField, string> = {
+  name: "name",
+  websiteUrl: "url",
+  shortDescription: "desc",
+  category: "category",
+  pricing: "pricing",
+  platforms: "platforms",
+};
+
+export type SubmitValidationError = {
+  field: SubmitField | null;
+  message: string;
+};
+
+export function validateSubmitInput(
+  data: SubmitInput,
+): SubmitValidationError | null {
   const parsed = submitSchema.safeParse(data);
   if (parsed.success) return null;
-  return parsed.error.issues[0]?.message ?? "Check the form and try again.";
+  const issue = parsed.error.issues[0];
+  const key = issue?.path[0];
+  return {
+    field:
+      typeof key === "string" && key in SUBMIT_FIELD_IDS
+        ? (key as SubmitField)
+        : null,
+    message: issue?.message ?? "Check the form and try again.",
+  };
 }

@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useState, type FormEvent } from "react";
+import { useEffect, useRef, useState, type FormEvent } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -13,7 +13,12 @@ import {
 import { Textarea } from "@/components/ui/textarea";
 import { CATEGORIES } from "@/lib/tools/categories";
 import { submitTool } from "@/lib/tools/submissions";
-import { formatSubmitError, validateSubmitInput } from "@/lib/tools/submit-schema";
+import {
+  formatSubmitError,
+  validateSubmitInput,
+  SUBMIT_FIELD_IDS,
+  type SubmitField,
+} from "@/lib/tools/submit-schema";
 import { DISCLAIMER } from "@/lib/brand";
 import type { Category, Platform, Pricing } from "@/lib/tools/types";
 import { PLATFORM_OPTIONS, PRICING_OPTIONS } from "@/lib/tools/types";
@@ -35,6 +40,23 @@ function SubmitPage() {
   const [pricing, setPricing] = useState<Pricing>("free");
   const [platforms, setPlatforms] = useState<Platform[]>(["web"]);
   const [error, setError] = useState("");
+  const [errorField, setErrorField] = useState<SubmitField | null>(null);
+  const doneHeadingRef = useRef<HTMLHeadingElement>(null);
+
+  // Send focus to the confirmation so the state change is announced and
+  // keyboard users are not dropped back at the top of the document.
+  useEffect(() => {
+    if (doneSlug) doneHeadingRef.current?.focus();
+  }, [doneSlug]);
+
+  const failWith = (field: SubmitField | null, message: string) => {
+    setError(message);
+    setErrorField(field);
+    if (field) {
+      const el = document.getElementById(SUBMIT_FIELD_IDS[field]);
+      el?.focus();
+    }
+  };
 
   const togglePlatform = (p: Platform) => {
     setPlatforms((prev) =>
@@ -45,6 +67,7 @@ function SubmitPage() {
   const onSubmit = async (e: FormEvent) => {
     e.preventDefault();
     setError("");
+    setErrorField(null);
     const payload = {
       name: name.trim(),
       websiteUrl: websiteUrl.trim(),
@@ -55,19 +78,19 @@ function SubmitPage() {
     };
     const localError = validateSubmitInput(payload);
     if (localError) {
-      setError(localError);
+      failWith(localError.field, localError.message);
       return;
     }
     setBusy(true);
     try {
       const result = await submitTool({ data: payload });
       if (!result.ok) {
-        setError(result.error);
+        failWith(null, result.error);
         return;
       }
       setDoneSlug(result.slug);
     } catch (err) {
-      setError(formatSubmitError(err));
+      failWith(null, formatSubmitError(err));
     } finally {
       setBusy(false);
     }
@@ -75,11 +98,15 @@ function SubmitPage() {
 
   if (doneSlug) {
     return (
-      <main className="mx-auto w-full max-w-xl flex-1 px-4 py-16">
+      <main className="mx-auto w-full max-w-xl flex-1 px-4 py-16" role="status">
         <p className="text-xs font-medium uppercase tracking-[0.22em] text-primary">
           Submitted
         </p>
-        <h1 className="mt-3 font-display text-4xl">
+        <h1
+          ref={doneHeadingRef}
+          tabIndex={-1}
+          className="mt-3 font-display text-4xl focus-ring"
+        >
           In review
         </h1>
         <p className="mt-3 text-muted-foreground">
@@ -117,6 +144,8 @@ function SubmitPage() {
             onChange={(e) => setName(e.target.value)}
             maxLength={80}
             required
+            aria-invalid={errorField === "name" || undefined}
+            aria-describedby={errorField === "name" ? "submit-error" : undefined}
           />
         </div>
         <div className="flex flex-col gap-2">
@@ -128,6 +157,10 @@ function SubmitPage() {
             value={websiteUrl}
             onChange={(e) => setWebsiteUrl(e.target.value)}
             required
+            aria-invalid={errorField === "websiteUrl" || undefined}
+            aria-describedby={
+              errorField === "websiteUrl" ? "submit-error" : undefined
+            }
           />
         </div>
         <div className="flex flex-col gap-2">
@@ -139,19 +172,25 @@ function SubmitPage() {
             value={shortDescription}
             onChange={(e) => setShortDescription(e.target.value)}
             required
+            aria-invalid={errorField === "shortDescription" || undefined}
+            aria-describedby={
+              errorField === "shortDescription"
+                ? "desc-hint submit-error"
+                : "desc-hint"
+            }
           />
-          <p className="text-xs text-muted-foreground">
+          <p id="desc-hint" className="text-xs text-muted-foreground">
             {shortDescription.length}/220 — at least 12 characters, no personal
             info.
           </p>
         </div>
         <div className="flex flex-col gap-2">
-          <Label>Category</Label>
+          <Label htmlFor="category">Category</Label>
           <Select
             value={category}
             onValueChange={(v) => setCategory(v as Category)}
           >
-            <SelectTrigger>
+            <SelectTrigger id="category">
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
@@ -164,12 +203,12 @@ function SubmitPage() {
           </Select>
         </div>
         <div className="flex flex-col gap-2">
-          <Label>Pricing</Label>
+          <Label htmlFor="pricing">Pricing</Label>
           <Select
             value={pricing}
             onValueChange={(v) => setPricing(v as Pricing)}
           >
-            <SelectTrigger>
+            <SelectTrigger id="pricing">
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
@@ -184,14 +223,16 @@ function SubmitPage() {
         <fieldset className="flex flex-col gap-2">
           <legend className="text-sm font-medium">Platforms</legend>
           <div className="flex flex-wrap gap-2">
-            {PLATFORM_OPTIONS.map((p) => {
+            {PLATFORM_OPTIONS.map((p, i) => {
               const on = platforms.includes(p);
               return (
                 <Button
                   key={p}
+                  id={i === 0 ? "platforms" : undefined}
                   type="button"
                   size="sm"
                   variant={on ? "default" : "outline"}
+                  aria-pressed={on}
                   onClick={() => togglePlatform(p)}
                 >
                   {p}
@@ -200,7 +241,11 @@ function SubmitPage() {
             })}
           </div>
         </fieldset>
-        {error ? <p className="text-sm text-primary">{error}</p> : null}
+        {error ? (
+          <p id="submit-error" role="alert" className="text-sm text-primary">
+            {error}
+          </p>
+        ) : null}
         <Button type="submit" disabled={busy}>
           {busy ? "Sending…" : "Submit listing"}
         </Button>

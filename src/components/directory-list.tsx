@@ -28,7 +28,7 @@ export function DirectoryList({
   if (tools.length === 0) {
     return (
       <div className="flex flex-col items-center gap-5 border-t border-border px-4 py-16 text-center">
-        <span className="grid size-14 place-items-center border border-input text-muted-foreground">
+        <span className="grid size-14 place-items-center border border-border-strong text-muted-foreground">
           <SearchX className="size-6" />
         </span>
         <div>
@@ -83,7 +83,7 @@ export function DirectoryList({
                 <Link
                   to="/tools/$slug"
                   params={{ slug: tool.slug }}
-                  className="min-w-0"
+                  className="focus-ring min-w-0"
                 >
                   <span className="block font-bold tracking-tight group-hover:text-primary">
                     {tool.name}
@@ -91,14 +91,14 @@ export function DirectoryList({
                   <span className="mt-1 block text-sm leading-snug text-muted-foreground">
                     {tool.shortDescription}
                   </span>
-                  <span className="font-label mt-2 block text-primary md:hidden">
+                  <span className="font-label mt-2 block text-muted-foreground md:hidden">
                     {categoryLabel(tool.category)}
                   </span>
                 </Link>
                 <Link
                   to="/category/$slug"
                   params={{ slug: categorySlug(tool.category) }}
-                  className="font-label hidden text-primary md:block"
+                  className="font-label focus-ring hidden text-muted-foreground hover:text-primary md:block"
                 >
                   {categoryLabel(tool.category)}
                 </Link>
@@ -114,7 +114,7 @@ export function DirectoryList({
                       type="button"
                       variant="ghost"
                       size="icon"
-                      className="size-8"
+                      className="size-10 sm:size-8"
                       aria-label={isSaved ? "Remove from saved" : "Save"}
                       onClick={() => onToggleSave(tool.id)}
                     >
@@ -130,7 +130,7 @@ export function DirectoryList({
                     href={tool.websiteUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="grid size-8 place-items-center text-muted-foreground group-hover:text-primary"
+                    className="focus-ring grid size-10 place-items-center text-muted-foreground group-hover:text-primary sm:size-8"
                     aria-label={`Visit ${tool.name}`}
                   >
                     <ArrowUpRight className="size-4" />
