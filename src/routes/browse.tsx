@@ -1,6 +1,7 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { DirectoryList } from "@/components/directory-list";
 import { FilterBar } from "@/components/filter-bar";
+import { FilterRail } from "@/components/filter-rail";
 import { useSavedTools } from "@/hooks/use-saved";
 import { mergeCatalog } from "@/lib/tools/catalog";
 import {
@@ -11,7 +12,7 @@ import {
 } from "@/lib/tools/filter";
 import { listApprovedSubmissions } from "@/lib/tools/submissions";
 import { seo } from "@/lib/seo";
-import type { Category, Platform, Pricing, ToolStatus } from "@/lib/tools/types";
+import { type Category, type Platform, type Pricing, type ToolStatus } from "@/lib/tools/types";
 
 type BrowseSearch = {
   q?: string;
@@ -73,6 +74,10 @@ function BrowsePage() {
   const sort: SortOption = search.sort ?? "default";
 
   const results = sortTools(filterTools(tools, filters), sort);
+  const categoryCounts = new Map<Category, number>();
+  for (const tool of tools) {
+    categoryCounts.set(tool.category, (categoryCounts.get(tool.category) ?? 0) + 1);
+  }
 
   const onChange = (next: ToolFilters) => {
     void navigate({
@@ -101,7 +106,17 @@ function BrowsePage() {
   };
 
   return (
-    <main className="mx-auto w-full max-w-7xl flex-1 px-4 py-10 sm:px-6">
+    <main className="mx-auto flex w-full max-w-7xl flex-1 px-4 sm:px-6">
+      {/* Every filter permanently visible — no toggle, no chip row to scan. */}
+      <FilterRail
+        value={filters}
+        onChange={onChange}
+        counts={categoryCounts}
+        total={tools.length}
+        extra
+      />
+
+      <div className="min-w-0 flex-1 py-10 lg:pl-6">
       <h1 className="font-display text-4xl">Browse</h1>
       <p className="mt-2 max-w-xl text-sm text-muted-foreground">
         Filter by category, platform, pricing, and status. We link out — this is
@@ -114,6 +129,7 @@ function BrowsePage() {
           count={tools.length}
           sort={sort}
           onSortChange={onSortChange}
+          hasRail
         />
       </div>
       <p className="mt-8 px-1 font-mono text-xs tabular-nums text-muted-foreground">
@@ -129,6 +145,7 @@ function BrowsePage() {
             onChange({ q: "", category: "", platform: "", pricing: "", status: "" })
           }
         />
+      </div>
       </div>
     </main>
   );

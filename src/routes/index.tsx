@@ -2,6 +2,7 @@ import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { DirectoryList } from "@/components/directory-list";
 import { FilterBar } from "@/components/filter-bar";
 import { CategoryStrip } from "@/components/category-strip";
+import { FilterRail } from "@/components/filter-rail";
 import { SpotlightRow } from "@/components/spotlight-row";
 import { useSavedTools } from "@/hooks/use-saved";
 import { mergeCatalog } from "@/lib/tools/catalog";
@@ -103,20 +104,30 @@ function Home() {
   };
 
   return (
-    <main className="mx-auto w-full max-w-7xl flex-1 px-4 py-6 sm:px-6 sm:py-8">
+    <main className="mx-auto flex w-full max-w-7xl flex-1 px-4 sm:px-6">
+      {/* The rail owns category selection at lg and up; below that the
+          horizontal strip does, since 230px cannot collapse to a phone. */}
+      <FilterRail
+        value={filters}
+        onChange={onChange}
+        counts={categoryCounts}
+        total={catalog.length}
+      />
+
+      <div className="min-w-0 flex-1 py-6 lg:pl-6 sm:py-8">
       {/* Hero and search share one row: the search is the primary action on a
           directory and previously sat 1,472px down the page. */}
       <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:gap-6">
         <h1 className="font-display text-2xl leading-tight sm:text-3xl lg:whitespace-nowrap">
           Every Valorant site worth your bookmark.
         </h1>
-        <p className="hidden font-mono text-xs text-muted-foreground lg:ml-auto lg:block">
+        <p className="hidden font-mono text-xs whitespace-nowrap text-muted-foreground xl:ml-auto xl:block">
           {catalog.length} listings · reviewed by hand · no affiliate links
         </p>
       </div>
 
       {!filtering ? (
-        <div className="mt-5">
+        <div className="mt-5 lg:hidden">
           <CategoryStrip counts={categoryCounts} />
         </div>
       ) : null}
@@ -133,6 +144,7 @@ function Home() {
           onChange={onChange}
           count={catalog.length}
           extra={false}
+          hasRail
         />
       </div>
 
@@ -152,6 +164,7 @@ function Home() {
         <Link to="/browse" className="text-primary">
           Browse all filters
         </Link>
+      </div>
       </div>
     </main>
   );
