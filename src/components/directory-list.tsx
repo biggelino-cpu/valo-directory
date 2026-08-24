@@ -71,14 +71,17 @@ export function DirectoryList({
               key={tool.id}
               className="group border-t border-border transition-colors hover:bg-card"
             >
-              <div className="grid grid-cols-[2.75rem_minmax(0,1fr)_auto] items-center gap-3 px-4 py-5 md:grid-cols-[2.75rem_1.75rem_minmax(0,1fr)_9rem_7rem_2.5rem] md:gap-4">
-                <span className="font-mono text-index tabular-nums text-muted-foreground group-hover:text-primary">
+              {/* Mobile drops the index column so the logo can take that slot —
+                  a site's mark identifies it far faster than its position in
+                  the list. The number moves into the meta line below. */}
+              <div className="grid grid-cols-[2rem_minmax(0,1fr)_auto] items-start gap-3 px-4 py-4 md:grid-cols-[2.75rem_1.75rem_minmax(0,1fr)_9rem_7rem_2.5rem] md:items-center md:gap-4 md:py-5">
+                <span className="hidden font-mono text-index tabular-nums text-muted-foreground group-hover:text-primary md:block">
                   {padIndex(n)}
                 </span>
                 <SiteIcon
                   name={tool.name}
                   websiteUrl={tool.websiteUrl}
-                  className="hidden size-7 text-xs md:grid"
+                  className="size-8 text-sm md:size-7 md:text-xs"
                 />
                 <Link
                   to="/tools/$slug"
@@ -91,8 +94,12 @@ export function DirectoryList({
                   <span className="mt-1 block text-sm leading-snug text-muted-foreground">
                     {tool.shortDescription}
                   </span>
-                  <span className="font-label mt-2 block text-muted-foreground md:hidden">
-                    {categoryLabel(tool.category)}
+                  <span className="font-label mt-2 flex items-center gap-2 text-muted-foreground md:hidden">
+                    <span className="tabular-nums">{padIndex(n)}</span>
+                    <span aria-hidden>·</span>
+                    <span>{categoryLabel(tool.category)}</span>
+                    <span aria-hidden>·</span>
+                    <span>{tool.pricing}</span>
                   </span>
                 </Link>
                 <Link
