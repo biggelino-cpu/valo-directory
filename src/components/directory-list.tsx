@@ -26,14 +26,10 @@ export function DirectoryList({
           <SearchX className="size-6" />
         </span>
         <div>
-          <p className="font-medium text-foreground">
-            No sites match those filters.
-          </p>
+          <p className="font-medium text-foreground">No sites match those filters.</p>
           <p className="mt-1.5 text-sm text-muted-foreground">
             Try a broader search or drop a filter
-            {typeof totalCount === "number"
-              ? ` — ${totalCount} sites are listed in total.`
-              : "."}
+            {typeof totalCount === "number" ? ` — ${totalCount} sites are listed in total.` : "."}
           </p>
         </div>
         {onClearFilters ? (
@@ -65,15 +61,11 @@ export function DirectoryList({
             >
               <div className="grid grid-cols-[2rem_minmax(0,1fr)_auto] items-start gap-3 px-4 py-4 md:grid-cols-[1.75rem_minmax(0,1fr)_9rem_7rem_2.5rem] md:items-center md:gap-4 md:py-5">
                 <SiteIcon
+                  slug={tool.slug}
                   name={tool.name}
-                  websiteUrl={tool.websiteUrl}
                   className="size-8 text-sm md:size-7 md:text-xs"
                 />
-                <Link
-                  to="/tools/$slug"
-                  params={{ slug: tool.slug }}
-                  className="focus-ring min-w-0"
-                >
+                <Link to="/tools/$slug" params={{ slug: tool.slug }} className="focus-ring min-w-0">
                   <span className="block font-bold tracking-tight group-hover:text-primary">
                     {tool.name}
                   </span>
@@ -94,9 +86,7 @@ export function DirectoryList({
                   {categoryLabel(tool.category)}
                 </Link>
                 <div className="hidden flex-col items-start gap-1 md:flex">
-                  <span className="font-mono text-xs text-muted-foreground">
-                    {tool.pricing}
-                  </span>
+                  <span className="font-mono text-xs text-muted-foreground">{tool.pricing}</span>
                   <VerifiedBadge date={tool.lastVerified} compact />
                 </div>
                 <div className="flex items-center justify-end gap-1">
@@ -110,10 +100,7 @@ export function DirectoryList({
                       onClick={() => onToggleSave(tool.id)}
                     >
                       <Bookmark
-                        className={cn(
-                          "size-3.5",
-                          isSaved && "fill-primary text-primary",
-                        )}
+                        className={cn("size-3.5", isSaved && "fill-primary text-primary")}
                       />
                     </Button>
                   ) : null}

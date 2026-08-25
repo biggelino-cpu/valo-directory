@@ -21,17 +21,11 @@ export function SpotlightRow({ spotlights }: { spotlights: Spotlight[] }) {
         >
           <div className="flex items-center justify-between gap-3">
             <span className="font-label text-primary">{label}</span>
-            <span className="font-label text-muted-foreground">
-              {categoryLabel(tool.category)}
-            </span>
+            <span className="font-label text-muted-foreground">{categoryLabel(tool.category)}</span>
           </div>
 
           <div className="flex items-start gap-3">
-            <SiteIcon
-              name={tool.name}
-              websiteUrl={tool.websiteUrl}
-              className="size-9 text-sm"
-            />
+            <SiteIcon slug={tool.slug} name={tool.name} className="size-9 text-sm" />
             <div className="min-w-0 flex-1">
               <Link
                 to="/tools/$slug"
@@ -48,9 +42,7 @@ export function SpotlightRow({ spotlights }: { spotlights: Spotlight[] }) {
 
           <div className="mt-auto flex items-center justify-between border-t border-border pt-3">
             <div className="flex items-center gap-3">
-              <span className="font-mono text-xs text-muted-foreground">
-                {tool.pricing}
-              </span>
+              <span className="font-mono text-xs text-muted-foreground">{tool.pricing}</span>
               <VerifiedBadge date={tool.lastVerified} compact />
             </div>
             <a
