@@ -36,6 +36,27 @@ function AboutPage() {
           accounts and no personal info.
         </li>
       </ul>
+      <h2 className="mt-10 font-display text-2xl">How we order listings</h2>
+      <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
+        We don&rsquo;t rank. The catalogue is shown in a random order that
+        reshuffles once a day, so no listing keeps the top spot and position
+        carries no meaning. You can re-sort it yourself by name, or by when we
+        last checked a listing.
+      </p>
+      <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
+        We considered ranking by popularity and decided against it: whatever
+        sits at the top gets the clicks, and would therefore stay at the top —
+        which buries smaller projects for being smaller. Scoring listings
+        against each other would mean inventing a number none of our data
+        supports. Random is the honest answer until we have something real to
+        rank on.
+      </p>
+      <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
+        The three highlighted picks on the home page are the exception, and
+        they are labelled as what they are: our own editorial choices. Nobody
+        pays for one.
+      </p>
+
       <h2 className="mt-10 font-display text-2xl">Independence</h2>
       <p className="mt-3 font-mono text-xs leading-relaxed text-muted-foreground">
         {DISCLAIMER}

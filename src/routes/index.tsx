@@ -3,10 +3,12 @@ import { DirectoryList } from "@/components/directory-list";
 import { FilterBar } from "@/components/filter-bar";
 import { CategoryStrip } from "@/components/category-strip";
 import { FilterRail } from "@/components/filter-rail";
+import { OrderNote } from "@/components/order-note";
 import { SpotlightRow } from "@/components/spotlight-row";
 import { useSavedTools } from "@/hooks/use-saved";
 import { mergeCatalog } from "@/lib/tools/catalog";
 import { resolveSpotlights } from "@/lib/tools/spotlight";
+import { dailySeed, shuffleTools } from "@/lib/tools/shuffle";
 import { filterTools, type ToolFilters } from "@/lib/tools/filter";
 import { listApprovedSubmissions } from "@/lib/tools/submissions";
 import { absoluteUrl, jsonLd, seo, SITE_URL } from "@/lib/seo";
@@ -28,11 +30,14 @@ export const Route = createFileRoute("/")({
   }),
   loader: async () => {
     const approved = await listApprovedSubmissions();
+    const catalog = mergeCatalog(approved);
     return {
-      approved,
-      // Resolved here, not in the component: the weekly slot is time-derived,
-      // and a server/client split across a week boundary would mismatch.
-      spotlights: resolveSpotlights(mergeCatalog(approved)),
+      // Shuffled here rather than in the component so the server and the
+      // client cannot disagree about the day, and so every downstream filter
+      // simply preserves the order.
+      catalog: shuffleTools(catalog, dailySeed()),
+      // Same reason: the weekly slot is time-derived.
+      spotlights: resolveSpotlights(catalog),
     };
   },
   component: Home,
@@ -73,10 +78,9 @@ export const Route = createFileRoute("/")({
 
 function Home() {
   const search = Route.useSearch();
-  const { approved, spotlights } = Route.useLoaderData();
+  const { catalog, spotlights } = Route.useLoaderData();
   const navigate = useNavigate({ from: "/" });
   const saved = useSavedTools();
-  const catalog = mergeCatalog(approved);
   const filters: ToolFilters = {
     q: search.q ?? "",
     category: search.category ?? "",
@@ -148,7 +152,9 @@ function Home() {
         />
       </div>
 
-      <div className="mt-5">
+      <OrderNote className="mt-5" />
+
+      <div className="mt-3">
         <DirectoryList
           tools={results}
           saved={new Set(saved.ids)}

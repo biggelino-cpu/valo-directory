@@ -8,19 +8,28 @@ export type ToolFilters = {
   status?: ToolStatus | "";
 };
 
-export type SortOption = "default" | "newest" | "az";
+export type SortOption = "random" | "verified" | "az";
 
 export const SORT_OPTIONS: { value: SortOption; label: string }[] = [
-  { value: "default", label: "Default" },
-  { value: "newest", label: "Newest" },
+  { value: "random", label: "Random" },
+  { value: "verified", label: "Recently checked" },
   { value: "az", label: "A–Z" },
 ];
 
+/**
+ * "random" is a no-op here: the catalogue arrives already shuffled for the
+ * day (see ./shuffle), and filtering preserves that order.
+ *
+ * The second option sorts by lastVerified, which records when we last checked
+ * the listing — not when the tool itself was updated, and not when it was
+ * added. It is labelled "Recently checked" rather than "Newest" because that
+ * is the only claim the data supports.
+ */
 export function sortTools(tools: Tool[], sort: SortOption): Tool[] {
   if (sort === "az") {
     return [...tools].sort((a, b) => a.name.localeCompare(b.name));
   }
-  if (sort === "newest") {
+  if (sort === "verified") {
     return [...tools].sort((a, b) => b.lastVerified.localeCompare(a.lastVerified));
   }
   return tools;

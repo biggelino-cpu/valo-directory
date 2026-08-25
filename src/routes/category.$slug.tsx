@@ -1,10 +1,12 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { DirectoryList } from "@/components/directory-list";
+import { OrderNote } from "@/components/order-note";
 import { Button } from "@/components/ui/button";
 import { useSavedTools } from "@/hooks/use-saved";
 import { categoryBySlug } from "@/lib/tools/categories";
 import { mergeCatalog } from "@/lib/tools/catalog";
 import { listApprovedSubmissions } from "@/lib/tools/submissions";
+import { dailySeed, shuffleTools } from "@/lib/tools/shuffle";
 import { absoluteUrl, breadcrumbs, jsonLd, seo } from "@/lib/seo";
 
 export const Route = createFileRoute("/category/$slug")({
@@ -12,7 +14,10 @@ export const Route = createFileRoute("/category/$slug")({
     const cat = categoryBySlug(params.slug);
     if (!cat) throw notFound();
     const approved = await listApprovedSubmissions();
-    const tools = mergeCatalog(approved).filter((t) => t.category === cat.name);
+    const tools = shuffleTools(
+      mergeCatalog(approved).filter((t) => t.category === cat.name),
+      dailySeed(),
+    );
     return { cat, tools };
   },
   component: CategoryPage,
@@ -81,9 +86,12 @@ function CategoryPage() {
       <p className="font-label text-primary">Category</p>
       <h1 className="mt-2 font-display text-4xl">{cat.name}</h1>
       <p className="mt-3 max-w-xl text-muted-foreground">{cat.blurb}</p>
-      <p className="mt-6 font-mono text-xs tabular-nums text-muted-foreground">
-        {tools.length} site{tools.length === 1 ? "" : "s"}
-      </p>
+      <div className="mt-6 flex flex-wrap items-center justify-between gap-x-6 gap-y-2">
+        <p className="font-mono text-xs tabular-nums text-muted-foreground">
+          {tools.length} site{tools.length === 1 ? "" : "s"}
+        </p>
+        <OrderNote />
+      </div>
       <div className="mt-4">
         <DirectoryList
           tools={tools}
