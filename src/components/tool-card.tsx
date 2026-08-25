@@ -7,7 +7,6 @@ import { categoryLabel } from "@/lib/tools/categories";
 import type { Tool } from "@/lib/tools/types";
 import { cn } from "@/lib/utils";
 
-
 export function ToolCard({
   tool,
   saved,
@@ -21,14 +20,8 @@ export function ToolCard({
     <Card className="group relative flex h-full flex-col">
       <CardContent className="flex h-full flex-col gap-5 p-5">
         <div className="flex items-start justify-between gap-3">
-          <SiteIcon
-            name={tool.name}
-            websiteUrl={tool.websiteUrl}
-            className="size-10 text-sm"
-          />
-          <span className="font-label text-muted-foreground">
-            {categoryLabel(tool.category)}
-          </span>
+          <SiteIcon slug={tool.slug} name={tool.name} className="size-10 text-sm" />
+          <span className="font-label text-muted-foreground">{categoryLabel(tool.category)}</span>
         </div>
         <div className="min-w-0">
           <Link
@@ -59,9 +52,7 @@ export function ToolCard({
                 aria-label={saved ? "Remove from saved" : "Save tool"}
                 onClick={() => onToggleSave(tool.id)}
               >
-                <Bookmark
-                  className={cn("size-3.5", saved && "fill-primary text-primary")}
-                />
+                <Bookmark className={cn("size-3.5", saved && "fill-primary text-primary")} />
               </Button>
             ) : null}
             <a

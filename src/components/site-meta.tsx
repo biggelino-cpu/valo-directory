@@ -1,30 +1,31 @@
 import { Check } from "lucide-react";
 import { useState } from "react";
+import { FAVICONS } from "@/lib/tools/favicons";
 import { formatVerifiedDate } from "@/lib/tools/format";
 import { cn } from "@/lib/utils";
 
-function faviconUrl(websiteUrl: string) {
-  try {
-    const { hostname } = new URL(websiteUrl);
-    return `https://www.google.com/s2/favicons?sz=64&domain=${hostname}`;
-  } catch {
-    return null;
-  }
-}
-
+/**
+ * Icons are served from our own origin, fetched ahead of time by
+ * scripts/fetch-favicons.mjs.
+ *
+ * They used to be loaded from a third-party favicon service, which meant every
+ * visitor's IP address and referrer reached that service once per listing —
+ * roughly twenty times per page view, automatically, before anyone could
+ * consent to it. Nothing about the icons was worth that.
+ *
+ * A listing with no icon in the manifest shows its monogram instead.
+ */
 export function SiteIcon({
+  slug,
   name,
-  websiteUrl,
   className,
 }: {
+  slug: string;
   name: string;
-  websiteUrl: string;
   className?: string;
 }) {
-  const [status, setStatus] = useState<"pending" | "loaded" | "failed">(
-    "pending",
-  );
-  const src = status === "failed" ? null : faviconUrl(websiteUrl);
+  const [failed, setFailed] = useState(false);
+  const src = failed ? undefined : FAVICONS[slug];
   const initial = name.slice(0, 1).toUpperCase();
 
   return (
@@ -39,17 +40,9 @@ export function SiteIcon({
         <img
           src={src}
           alt=""
-          className={cn(
-            "absolute inset-0 size-full bg-card object-contain p-1",
-            status === "loaded" ? "opacity-100" : "opacity-0",
-          )}
+          className="absolute inset-0 size-full bg-card object-contain p-1"
           loading="lazy"
-          onError={() => setStatus("failed")}
-          onLoad={(e) => {
-            // Google's service answers with a 16px generic globe when it has
-            // no icon for the domain; anything that small is not a real icon.
-            setStatus(e.currentTarget.naturalWidth > 16 ? "loaded" : "failed");
-          }}
+          onError={() => setFailed(true)}
         />
       ) : null}
     </span>
