@@ -6,22 +6,16 @@ import type { Tool } from "@/lib/tools/types";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 
-function padIndex(n: number) {
-  return String(n).padStart(2, "0");
-}
-
 export function DirectoryList({
   tools,
   saved,
   onToggleSave,
-  start = 1,
   totalCount,
   onClearFilters,
 }: {
   tools: Tool[];
   saved?: Set<string>;
   onToggleSave?: (id: string) => void;
-  start?: number;
   totalCount?: number;
   onClearFilters?: () => void;
 }) {
@@ -54,8 +48,7 @@ export function DirectoryList({
 
   return (
     <div className="border-t border-border">
-      <div className="hidden grid-cols-[2.75rem_1.75rem_minmax(0,1fr)_9rem_7rem_2.5rem] gap-4 bg-card px-4 py-3 font-label text-muted-foreground md:grid">
-        <span>#</span>
+      <div className="hidden grid-cols-[1.75rem_minmax(0,1fr)_9rem_7rem_2.5rem] gap-4 bg-card px-4 py-3 font-label text-muted-foreground md:grid">
         <span />
         <span>Site</span>
         <span>Category</span>
@@ -63,21 +56,14 @@ export function DirectoryList({
         <span />
       </div>
       <ol>
-        {tools.map((tool, i) => {
-          const n = start + i;
+        {tools.map((tool) => {
           const isSaved = saved?.has(tool.id);
           return (
             <li
               key={tool.id}
               className="group border-t border-border transition-colors hover:bg-card"
             >
-              {/* Mobile drops the index column so the logo can take that slot —
-                  a site's mark identifies it far faster than its position in
-                  the list. The number moves into the meta line below. */}
-              <div className="grid grid-cols-[2rem_minmax(0,1fr)_auto] items-start gap-3 px-4 py-4 md:grid-cols-[2.75rem_1.75rem_minmax(0,1fr)_9rem_7rem_2.5rem] md:items-center md:gap-4 md:py-5">
-                <span className="hidden font-mono text-index tabular-nums text-muted-foreground group-hover:text-primary md:block">
-                  {padIndex(n)}
-                </span>
+              <div className="grid grid-cols-[2rem_minmax(0,1fr)_auto] items-start gap-3 px-4 py-4 md:grid-cols-[1.75rem_minmax(0,1fr)_9rem_7rem_2.5rem] md:items-center md:gap-4 md:py-5">
                 <SiteIcon
                   name={tool.name}
                   websiteUrl={tool.websiteUrl}
@@ -95,8 +81,6 @@ export function DirectoryList({
                     {tool.shortDescription}
                   </span>
                   <span className="font-label mt-2 flex items-center gap-2 text-muted-foreground md:hidden">
-                    <span className="tabular-nums">{padIndex(n)}</span>
-                    <span aria-hidden>·</span>
                     <span>{categoryLabel(tool.category)}</span>
                     <span aria-hidden>·</span>
                     <span>{tool.pricing}</span>

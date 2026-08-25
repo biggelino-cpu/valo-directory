@@ -9,6 +9,7 @@ import { Separator } from "@/components/ui/separator";
 import { useSavedTools } from "@/hooks/use-saved";
 import { mergeCatalog } from "@/lib/tools/catalog";
 import { formatVerifiedDate } from "@/lib/tools/format";
+import { dailySeed, shuffleTools } from "@/lib/tools/shuffle";
 import { absoluteUrl, breadcrumbs, jsonLd, platformLabel, seo } from "@/lib/seo";
 import { categoryLabel, categorySlug } from "@/lib/tools/categories";
 import { getToolBySlug } from "@/lib/tools/seed";
@@ -28,9 +29,14 @@ export const Route = createFileRoute("/tools/$slug")({
     ]);
     const tool = seed ?? fromDb;
     if (!tool) throw notFound();
-    const related = mergeCatalog(approved)
-      .filter((t) => t.category === tool.category && t.id !== tool.id)
-      .slice(0, 3);
+    // Shuffled too: taking the first three by array order quietly gave the
+    // same neighbours the exposure every time.
+    const related = shuffleTools(
+      mergeCatalog(approved).filter(
+        (t) => t.category === tool.category && t.id !== tool.id,
+      ),
+      dailySeed(),
+    ).slice(0, 3);
     return { tool, related };
   },
   component: ToolDetail,

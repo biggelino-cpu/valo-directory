@@ -2,6 +2,7 @@ import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { DirectoryList } from "@/components/directory-list";
 import { FilterBar } from "@/components/filter-bar";
 import { FilterRail } from "@/components/filter-rail";
+import { OrderNote } from "@/components/order-note";
 import { useSavedTools } from "@/hooks/use-saved";
 import { mergeCatalog } from "@/lib/tools/catalog";
 import {
@@ -11,6 +12,7 @@ import {
   type ToolFilters,
 } from "@/lib/tools/filter";
 import { listApprovedSubmissions } from "@/lib/tools/submissions";
+import { dailySeed, shuffleTools } from "@/lib/tools/shuffle";
 import { seo } from "@/lib/seo";
 import { type Category, type Platform, type Pricing, type ToolStatus } from "@/lib/tools/types";
 
@@ -45,7 +47,10 @@ export const Route = createFileRoute("/browse")({
     sort:
       typeof search.sort === "string" ? (search.sort as SortOption) : undefined,
   }),
-  loader: async () => ({ approved: await listApprovedSubmissions() }),
+  loader: async () => {
+    const approved = await listApprovedSubmissions();
+    return { tools: shuffleTools(mergeCatalog(approved), dailySeed()) };
+  },
   component: BrowsePage,
   head: () =>
     seo({
@@ -59,10 +64,9 @@ export const Route = createFileRoute("/browse")({
 
 function BrowsePage() {
   const search = Route.useSearch();
-  const { approved } = Route.useLoaderData();
+  const { tools } = Route.useLoaderData();
   const navigate = useNavigate({ from: "/browse" });
   const saved = useSavedTools();
-  const tools = mergeCatalog(approved);
 
   const filters: ToolFilters = {
     q: search.q ?? "",
@@ -71,7 +75,7 @@ function BrowsePage() {
     pricing: search.pricing ?? "",
     status: search.status ?? "",
   };
-  const sort: SortOption = search.sort ?? "default";
+  const sort: SortOption = search.sort ?? "random";
 
   const results = sortTools(filterTools(tools, filters), sort);
   const categoryCounts = new Map<Category, number>();
@@ -87,7 +91,7 @@ function BrowsePage() {
         platform: next.platform || undefined,
         pricing: next.pricing || undefined,
         status: next.status || undefined,
-        sort: sort !== "default" ? sort : undefined,
+        sort: sort !== "random" ? sort : undefined,
       },
     });
   };
@@ -100,7 +104,7 @@ function BrowsePage() {
         platform: filters.platform || undefined,
         pricing: filters.pricing || undefined,
         status: filters.status || undefined,
-        sort: next !== "default" ? next : undefined,
+        sort: next !== "random" ? next : undefined,
       },
     });
   };
@@ -132,9 +136,12 @@ function BrowsePage() {
           hasRail
         />
       </div>
-      <p className="mt-8 px-1 font-mono text-xs tabular-nums text-muted-foreground">
-        {results.length} of {tools.length}
-      </p>
+      <div className="mt-8 flex flex-wrap items-center justify-between gap-x-6 gap-y-2 px-1">
+        <p className="font-mono text-xs tabular-nums text-muted-foreground">
+          {results.length} of {tools.length}
+        </p>
+        <OrderNote sort={sort} />
+      </div>
       <div className="mt-2">
         <DirectoryList
           tools={results}
