@@ -13,9 +13,11 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as BrowseRouteImport } from './routes/browse'
 import { Route as PendingRouteImport } from './routes/pending'
+import { Route as PrivacyRouteImport } from './routes/privacy'
 import { Route as ReviewRouteImport } from './routes/review'
 import { Route as SavedRouteImport } from './routes/saved'
 import { Route as SubmitRouteImport } from './routes/submit'
+import { Route as TermsRouteImport } from './routes/terms'
 import { Route as CategorySlugRouteImport } from './routes/category.$slug'
 import { Route as ToolsSlugRouteImport } from './routes/tools.$slug'
 
@@ -39,6 +41,11 @@ const PendingRoute = PendingRouteImport.update({
   path: '/pending',
   getParentRoute: () => rootRouteImport,
 } as any)
+const PrivacyRoute = PrivacyRouteImport.update({
+  id: '/privacy',
+  path: '/privacy',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ReviewRoute = ReviewRouteImport.update({
   id: '/review',
   path: '/review',
@@ -52,6 +59,11 @@ const SavedRoute = SavedRouteImport.update({
 const SubmitRoute = SubmitRouteImport.update({
   id: '/submit',
   path: '/submit',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const TermsRoute = TermsRouteImport.update({
+  id: '/terms',
+  path: '/terms',
   getParentRoute: () => rootRouteImport,
 } as any)
 const CategorySlugRoute = CategorySlugRouteImport.update({
@@ -70,9 +82,11 @@ export interface FileRoutesByFullPath {
   '/about': typeof AboutRoute
   '/browse': typeof BrowseRoute
   '/pending': typeof PendingRoute
+  '/privacy': typeof PrivacyRoute
   '/review': typeof ReviewRoute
   '/saved': typeof SavedRoute
   '/submit': typeof SubmitRoute
+  '/terms': typeof TermsRoute
   '/category/$slug': typeof CategorySlugRoute
   '/tools/$slug': typeof ToolsSlugRoute
 }
@@ -81,9 +95,11 @@ export interface FileRoutesByTo {
   '/about': typeof AboutRoute
   '/browse': typeof BrowseRoute
   '/pending': typeof PendingRoute
+  '/privacy': typeof PrivacyRoute
   '/review': typeof ReviewRoute
   '/saved': typeof SavedRoute
   '/submit': typeof SubmitRoute
+  '/terms': typeof TermsRoute
   '/category/$slug': typeof CategorySlugRoute
   '/tools/$slug': typeof ToolsSlugRoute
 }
@@ -93,9 +109,11 @@ export interface FileRoutesById {
   '/about': typeof AboutRoute
   '/browse': typeof BrowseRoute
   '/pending': typeof PendingRoute
+  '/privacy': typeof PrivacyRoute
   '/review': typeof ReviewRoute
   '/saved': typeof SavedRoute
   '/submit': typeof SubmitRoute
+  '/terms': typeof TermsRoute
   '/category/$slug': typeof CategorySlugRoute
   '/tools/$slug': typeof ToolsSlugRoute
 }
@@ -106,9 +124,11 @@ export interface FileRouteTypes {
     | '/about'
     | '/browse'
     | '/pending'
+    | '/privacy'
     | '/review'
     | '/saved'
     | '/submit'
+    | '/terms'
     | '/category/$slug'
     | '/tools/$slug'
   fileRoutesByTo: FileRoutesByTo
@@ -117,9 +137,11 @@ export interface FileRouteTypes {
     | '/about'
     | '/browse'
     | '/pending'
+    | '/privacy'
     | '/review'
     | '/saved'
     | '/submit'
+    | '/terms'
     | '/category/$slug'
     | '/tools/$slug'
   id:
@@ -128,9 +150,11 @@ export interface FileRouteTypes {
     | '/about'
     | '/browse'
     | '/pending'
+    | '/privacy'
     | '/review'
     | '/saved'
     | '/submit'
+    | '/terms'
     | '/category/$slug'
     | '/tools/$slug'
   fileRoutesById: FileRoutesById
@@ -140,9 +164,11 @@ export interface RootRouteChildren {
   AboutRoute: typeof AboutRoute
   BrowseRoute: typeof BrowseRoute
   PendingRoute: typeof PendingRoute
+  PrivacyRoute: typeof PrivacyRoute
   ReviewRoute: typeof ReviewRoute
   SavedRoute: typeof SavedRoute
   SubmitRoute: typeof SubmitRoute
+  TermsRoute: typeof TermsRoute
   CategorySlugRoute: typeof CategorySlugRoute
   ToolsSlugRoute: typeof ToolsSlugRoute
 }
@@ -177,6 +203,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PendingRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/privacy': {
+      id: '/privacy'
+      path: '/privacy'
+      fullPath: '/privacy'
+      preLoaderRoute: typeof PrivacyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/review': {
       id: '/review'
       path: '/review'
@@ -196,6 +229,13 @@ declare module '@tanstack/react-router' {
       path: '/submit'
       fullPath: '/submit'
       preLoaderRoute: typeof SubmitRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/terms': {
+      id: '/terms'
+      path: '/terms'
+      fullPath: '/terms'
+      preLoaderRoute: typeof TermsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/category/$slug': {
@@ -220,9 +260,11 @@ const rootRouteChildren: RootRouteChildren = {
   AboutRoute: AboutRoute,
   BrowseRoute: BrowseRoute,
   PendingRoute: PendingRoute,
+  PrivacyRoute: PrivacyRoute,
   ReviewRoute: ReviewRoute,
   SavedRoute: SavedRoute,
   SubmitRoute: SubmitRoute,
+  TermsRoute: TermsRoute,
   CategorySlugRoute: CategorySlugRoute,
   ToolsSlugRoute: ToolsSlugRoute,
 }
