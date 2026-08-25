@@ -80,10 +80,30 @@ export function SiteHeader() {
   );
 }
 
+const FOOTER_LINKS = [
+  { to: "/about", label: "About" },
+  { to: "/submit", label: "Submit" },
+  { to: "/impressum", label: "Impressum" },
+  { to: "/datenschutz", label: "Datenschutz" },
+];
+
 export function SiteFooter() {
   return (
     <footer className="mt-auto border-t border-border">
-      <div className="mx-auto flex max-w-7xl flex-col gap-4 px-4 py-8 sm:px-6">
+      <div className="mx-auto flex max-w-7xl flex-col gap-5 px-4 py-8 sm:px-6">
+        <nav className="flex flex-wrap items-center gap-x-6 gap-y-2">
+          {FOOTER_LINKS.map((item) => (
+            <Link
+              key={item.to}
+              to={item.to}
+              className={NAV_LINK}
+              activeProps={NAV_ACTIVE}
+              inactiveProps={NAV_INACTIVE}
+            >
+              {item.label}
+            </Link>
+          ))}
+        </nav>
         <p className="max-w-3xl font-mono text-xs leading-relaxed text-muted-foreground">
           {DISCLAIMER}
         </p>
