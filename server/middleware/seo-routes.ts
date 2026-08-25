@@ -24,8 +24,8 @@ const STATIC_PATHS: { path: string; priority: string; changefreq: string }[] = [
   { path: "/browse", priority: "0.9", changefreq: "daily" },
   { path: "/about", priority: "0.5", changefreq: "monthly" },
   { path: "/submit", priority: "0.5", changefreq: "monthly" },
-  { path: "/impressum", priority: "0.2", changefreq: "yearly" },
-  { path: "/datenschutz", priority: "0.2", changefreq: "yearly" },
+  { path: "/privacy", priority: "0.2", changefreq: "yearly" },
+  { path: "/terms", priority: "0.2", changefreq: "yearly" },
 ];
 
 const NOINDEX_PATHS = ["/saved", "/review", "/pending"];

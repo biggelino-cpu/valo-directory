@@ -1,26 +1,32 @@
 /**
- * Angaben für Impressum (§ 5 DDG) und Datenschutzerklärung (Art. 13 DSGVO).
+ * Operator details used by the Privacy Policy and the Terms of Use.
  *
- * Diese Werte müssen vom Betreiber ausgefüllt werden, bevor die Seite breit
- * geteilt wird. Alles, was hier noch mit "TODO:" beginnt, wird auf den
- * Rechtsseiten sichtbar als offen markiert — bewusst, damit ein unfertiges
- * Impressum nicht wie ein fertiges aussieht.
+ * The site and its operator are in the United States, so these pages follow
+ * US practice: there is no general "imprint" duty as in the EU, but a
+ * contactable operator, a DMCA agent and a privacy notice are all worth
+ * having — the first two because this site carries user-submitted links, the
+ * third because several state laws expect one regardless of company size.
+ *
+ * Anything still starting with "TODO:" renders on the page as visibly
+ * unfinished. That is deliberate: a policy that names a plausible-looking
+ * fake address is worse than one that admits it is incomplete.
  */
 export const OPERATOR = {
-  /** Vor- und Nachname bzw. Firmenname des Diensteanbieters. */
-  name: "TODO: Vor- und Nachname",
-  /** Ladungsfähige Anschrift — ein Postfach genügt nach § 5 DDG nicht. */
-  street: "TODO: Straße und Hausnummer",
-  city: "TODO: PLZ und Ort",
-  country: "Deutschland",
-  /** E-Mail ist Pflicht; eine zweite schnelle Kontaktmöglichkeit ist empfohlen. */
-  email: "TODO: kontakt@example.com",
-  /** Optional: Telefonnummer, USt-IdNr., Registereintrag. Leer lassen, wenn nicht zutreffend. */
-  phone: "",
-  vatId: "",
+  /** Person or company that runs the site. */
+  name: "TODO: Full name or company",
+  /** Mailing address. A DMCA agent designation needs a real one. */
+  street: "TODO: Street address",
+  city: "TODO: City, State ZIP",
+  country: "United States",
+  /** Primary contact. Also the address for privacy requests. */
+  email: "TODO: contact@example.com",
+  /** Where copyright complaints go. Often the same mailbox. */
+  dmcaEmail: "TODO: contact@example.com",
+  /** State whose law governs the Terms, e.g. "the State of California". */
+  governingLaw: "TODO: your state",
 } as const;
 
-/** Datum der letzten inhaltlichen Änderung dieser Texte. */
+/** Date these texts were last changed in substance. */
 export const LEGAL_UPDATED = "2026-08-25";
 
 export function isPlaceholder(value: string): boolean {

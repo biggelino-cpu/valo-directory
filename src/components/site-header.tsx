@@ -83,8 +83,8 @@ export function SiteHeader() {
 const FOOTER_LINKS = [
   { to: "/about", label: "About" },
   { to: "/submit", label: "Submit" },
-  { to: "/impressum", label: "Impressum" },
-  { to: "/datenschutz", label: "Datenschutz" },
+  { to: "/privacy", label: "Privacy" },
+  { to: "/terms", label: "Terms" },
 ];
 
 export function SiteFooter() {

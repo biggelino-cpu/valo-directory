@@ -1,8 +1,8 @@
 import { isPlaceholder } from "@/lib/legal";
 
 /**
- * Shared shell for the two legal pages, so Impressum and Datenschutzerklärung
- * read as one document set rather than two differently-styled pages.
+ * Shared shell for the legal pages, so the Privacy Policy and the Terms read
+ * as one document set rather than two differently-styled pages.
  */
 export function LegalPage({
   title,
@@ -23,7 +23,7 @@ export function LegalPage({
       ) : null}
       <div className="mt-8 space-y-8">{children}</div>
       <p className="mt-12 border-t border-border pt-4 font-mono text-xs text-muted-foreground">
-        Stand: {updated}
+        Last updated: {updated}
       </p>
     </main>
   );
@@ -48,14 +48,14 @@ export function LegalSection({
 
 /**
  * Renders an operator detail, or — while it is still a TODO — says so in the
- * page itself. An Impressum that silently shows a filler address is worse than
- * one that admits it is unfinished.
+ * page itself. A policy that silently shows a filler address is worse than one
+ * that admits it is unfinished.
  */
 export function LegalValue({ value }: { value: string }) {
   if (!isPlaceholder(value)) return <>{value}</>;
   return (
     <span className="font-mono text-xs text-primary">
-      [{value.replace(/^TODO:\s*/, "")} — noch einzutragen]
+      [{value.replace(/^TODO:\s*/, "")} — to be filled in]
     </span>
   );
 }

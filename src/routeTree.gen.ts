@@ -12,12 +12,12 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as BrowseRouteImport } from './routes/browse'
-import { Route as DatenschutzRouteImport } from './routes/datenschutz'
-import { Route as ImpressumRouteImport } from './routes/impressum'
 import { Route as PendingRouteImport } from './routes/pending'
+import { Route as PrivacyRouteImport } from './routes/privacy'
 import { Route as ReviewRouteImport } from './routes/review'
 import { Route as SavedRouteImport } from './routes/saved'
 import { Route as SubmitRouteImport } from './routes/submit'
+import { Route as TermsRouteImport } from './routes/terms'
 import { Route as CategorySlugRouteImport } from './routes/category.$slug'
 import { Route as ToolsSlugRouteImport } from './routes/tools.$slug'
 
@@ -36,19 +36,14 @@ const BrowseRoute = BrowseRouteImport.update({
   path: '/browse',
   getParentRoute: () => rootRouteImport,
 } as any)
-const DatenschutzRoute = DatenschutzRouteImport.update({
-  id: '/datenschutz',
-  path: '/datenschutz',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ImpressumRoute = ImpressumRouteImport.update({
-  id: '/impressum',
-  path: '/impressum',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const PendingRoute = PendingRouteImport.update({
   id: '/pending',
   path: '/pending',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PrivacyRoute = PrivacyRouteImport.update({
+  id: '/privacy',
+  path: '/privacy',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ReviewRoute = ReviewRouteImport.update({
@@ -66,6 +61,11 @@ const SubmitRoute = SubmitRouteImport.update({
   path: '/submit',
   getParentRoute: () => rootRouteImport,
 } as any)
+const TermsRoute = TermsRouteImport.update({
+  id: '/terms',
+  path: '/terms',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const CategorySlugRoute = CategorySlugRouteImport.update({
   id: '/category/$slug',
   path: '/category/$slug',
@@ -81,12 +81,12 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/browse': typeof BrowseRoute
-  '/datenschutz': typeof DatenschutzRoute
-  '/impressum': typeof ImpressumRoute
   '/pending': typeof PendingRoute
+  '/privacy': typeof PrivacyRoute
   '/review': typeof ReviewRoute
   '/saved': typeof SavedRoute
   '/submit': typeof SubmitRoute
+  '/terms': typeof TermsRoute
   '/category/$slug': typeof CategorySlugRoute
   '/tools/$slug': typeof ToolsSlugRoute
 }
@@ -94,12 +94,12 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/browse': typeof BrowseRoute
-  '/datenschutz': typeof DatenschutzRoute
-  '/impressum': typeof ImpressumRoute
   '/pending': typeof PendingRoute
+  '/privacy': typeof PrivacyRoute
   '/review': typeof ReviewRoute
   '/saved': typeof SavedRoute
   '/submit': typeof SubmitRoute
+  '/terms': typeof TermsRoute
   '/category/$slug': typeof CategorySlugRoute
   '/tools/$slug': typeof ToolsSlugRoute
 }
@@ -108,12 +108,12 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/browse': typeof BrowseRoute
-  '/datenschutz': typeof DatenschutzRoute
-  '/impressum': typeof ImpressumRoute
   '/pending': typeof PendingRoute
+  '/privacy': typeof PrivacyRoute
   '/review': typeof ReviewRoute
   '/saved': typeof SavedRoute
   '/submit': typeof SubmitRoute
+  '/terms': typeof TermsRoute
   '/category/$slug': typeof CategorySlugRoute
   '/tools/$slug': typeof ToolsSlugRoute
 }
@@ -123,12 +123,12 @@ export interface FileRouteTypes {
     | '/'
     | '/about'
     | '/browse'
-    | '/datenschutz'
-    | '/impressum'
     | '/pending'
+    | '/privacy'
     | '/review'
     | '/saved'
     | '/submit'
+    | '/terms'
     | '/category/$slug'
     | '/tools/$slug'
   fileRoutesByTo: FileRoutesByTo
@@ -136,12 +136,12 @@ export interface FileRouteTypes {
     | '/'
     | '/about'
     | '/browse'
-    | '/datenschutz'
-    | '/impressum'
     | '/pending'
+    | '/privacy'
     | '/review'
     | '/saved'
     | '/submit'
+    | '/terms'
     | '/category/$slug'
     | '/tools/$slug'
   id:
@@ -149,12 +149,12 @@ export interface FileRouteTypes {
     | '/'
     | '/about'
     | '/browse'
-    | '/datenschutz'
-    | '/impressum'
     | '/pending'
+    | '/privacy'
     | '/review'
     | '/saved'
     | '/submit'
+    | '/terms'
     | '/category/$slug'
     | '/tools/$slug'
   fileRoutesById: FileRoutesById
@@ -163,12 +163,12 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AboutRoute: typeof AboutRoute
   BrowseRoute: typeof BrowseRoute
-  DatenschutzRoute: typeof DatenschutzRoute
-  ImpressumRoute: typeof ImpressumRoute
   PendingRoute: typeof PendingRoute
+  PrivacyRoute: typeof PrivacyRoute
   ReviewRoute: typeof ReviewRoute
   SavedRoute: typeof SavedRoute
   SubmitRoute: typeof SubmitRoute
+  TermsRoute: typeof TermsRoute
   CategorySlugRoute: typeof CategorySlugRoute
   ToolsSlugRoute: typeof ToolsSlugRoute
 }
@@ -196,25 +196,18 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof BrowseRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/datenschutz': {
-      id: '/datenschutz'
-      path: '/datenschutz'
-      fullPath: '/datenschutz'
-      preLoaderRoute: typeof DatenschutzRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/impressum': {
-      id: '/impressum'
-      path: '/impressum'
-      fullPath: '/impressum'
-      preLoaderRoute: typeof ImpressumRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/pending': {
       id: '/pending'
       path: '/pending'
       fullPath: '/pending'
       preLoaderRoute: typeof PendingRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/privacy': {
+      id: '/privacy'
+      path: '/privacy'
+      fullPath: '/privacy'
+      preLoaderRoute: typeof PrivacyRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/review': {
@@ -238,6 +231,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SubmitRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/terms': {
+      id: '/terms'
+      path: '/terms'
+      fullPath: '/terms'
+      preLoaderRoute: typeof TermsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/category/$slug': {
       id: '/category/$slug'
       path: '/category/$slug'
@@ -259,12 +259,12 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AboutRoute: AboutRoute,
   BrowseRoute: BrowseRoute,
-  DatenschutzRoute: DatenschutzRoute,
-  ImpressumRoute: ImpressumRoute,
   PendingRoute: PendingRoute,
+  PrivacyRoute: PrivacyRoute,
   ReviewRoute: ReviewRoute,
   SavedRoute: SavedRoute,
   SubmitRoute: SubmitRoute,
+  TermsRoute: TermsRoute,
   CategorySlugRoute: CategorySlugRoute,
   ToolsSlugRoute: ToolsSlugRoute,
 }
