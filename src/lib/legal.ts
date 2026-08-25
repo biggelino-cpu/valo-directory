@@ -1,30 +1,36 @@
 /**
- * Operator details used by the Privacy Policy and the Terms of Use.
+ * Contact details for the Privacy Policy and the Terms.
  *
- * The site and its operator are in the United States, so these pages follow
- * US practice: there is no general "imprint" duty as in the EU, but a
- * contactable operator, a DMCA agent and a privacy notice are all worth
- * having — the first two because this site carries user-submitted links, the
- * third because several state laws expect one regardless of company size.
- *
- * Anything still starting with "TODO:" renders on the page as visibly
- * unfinished. That is deliberate: a policy that names a plausible-looking
- * fake address is worse than one that admits it is incomplete.
+ * There is deliberately no postal address here. US law has no equivalent of
+ * the German § 5 DDG imprint duty: a website is not obliged to publish who
+ * runs it or where they live. The one exception is the DMCA agent below, and
+ * that is opt-in.
  */
 export const OPERATOR = {
-  /** Person or company that runs the site. */
-  name: "TODO: Full name or company",
-  /** Mailing address. A DMCA agent designation needs a real one. */
-  street: "TODO: Street address",
-  city: "TODO: City, State ZIP",
-  country: "United States",
-  /** Primary contact. Also the address for privacy requests. */
+  /** The single contact address. Also where privacy requests go. */
   email: "TODO: contact@example.com",
-  /** Where copyright complaints go. Often the same mailbox. */
-  dmcaEmail: "TODO: contact@example.com",
-  /** State whose law governs the Terms, e.g. "the State of California". */
-  governingLaw: "TODO: your state",
 } as const;
+
+/**
+ * Designated agent for copyright complaints.
+ *
+ * Safe harbour under 17 U.S.C. § 512(c) is conditional: the agent's name,
+ * address, phone number and email must be posted publicly here *and*
+ * registered with the US Copyright Office (dmca.copyright.gov, ~$6, renewed
+ * every three years). That publication is the only reason this site would
+ * ever carry a postal address — so it is a genuine trade-off, not a formality.
+ * A PO box or virtual mailbox satisfies it.
+ *
+ * Leave this null and the Terms simply invite copyright complaints by email
+ * without claiming a safe harbour we have not earned. Fill it in and the full
+ * § 512 procedure appears.
+ */
+export const DMCA_AGENT: {
+  name: string;
+  address: string;
+  phone: string;
+  email: string;
+} | null = null;
 
 /** Date these texts were last changed in substance. */
 export const LEGAL_UPDATED = "2026-08-25";
