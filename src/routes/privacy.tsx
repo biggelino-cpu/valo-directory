@@ -3,6 +3,17 @@ import { LegalPage, LegalSection, LegalValue } from "@/components/legal";
 import { LEGAL_UPDATED, OPERATOR } from "@/lib/legal";
 import { seo } from "@/lib/seo";
 
+/**
+ * Kept to what California's privacy law actually asks a site like this to
+ * disclose (Cal. Bus. & Prof. Code § 22575): the categories collected, who
+ * else sees them, how to ask about them, how changes are announced, an
+ * effective date, and a Do Not Track statement — plus a line on children.
+ *
+ * Everything else that a template would add is left out on purpose. We are
+ * far below the CCPA's thresholds, so reciting its rights would describe
+ * obligations we do not have; and since there is no account, no analytics and
+ * no advertising, most of a standard policy would be describing an absence.
+ */
 export const Route = createFileRoute("/privacy")({
   component: PrivacyPage,
   head: () =>
@@ -18,173 +29,79 @@ function PrivacyPage() {
   return (
     <LegalPage
       title="Privacy Policy"
-      intro="VALO DIRECTORY is a catalog of links. There are no accounts, no advertising and no analytics, so there is very little to collect. This page describes what still gets recorded and why."
+      intro="VALO DIRECTORY is a catalog of links, run from the United States. There are no accounts, no advertising and no analytics, so there is very little to collect."
       updated={LEGAL_UPDATED}
     >
-      <LegalSection heading="The short version">
-        <ul className="list-disc space-y-1 pl-5">
-          <li>No analytics, tracking pixels, advertising or data brokers.</li>
-          <li>No cookies that require consent — which is why there is no cookie banner.</li>
-          <li>No accounts, no sign-up, no newsletter.</li>
-          <li>We never sell or share your personal information, under any definition of those words.</li>
-          <li>
-            Fonts and the icons of listed sites are served from our own servers, so simply
-            loading a page does not contact anyone else.
-          </li>
-          <li>The tools you save stay in your browser and never reach us.</li>
-        </ul>
-      </LegalSection>
-
-      <LegalSection heading="Who runs this site">
-        <p>
-          <LegalValue value={OPERATOR.name} />
-          <br />
-          <LegalValue value={OPERATOR.street} />
-          <br />
-          <LegalValue value={OPERATOR.city} />
-          <br />
-          {OPERATOR.country}
-          <br />
-          Contact: <LegalValue value={OPERATOR.email} />
-        </p>
-        <p>
-          The site is operated from and hosted in the United States. If you use it from
-          elsewhere, your information is processed in the US.
-        </p>
-      </LegalSection>
-
       <LegalSection heading="What we collect">
-        <p className="font-label text-foreground">Server logs</p>
         <p>
-          The site is hosted by Vercel Inc. (Covina, California), and requests are served
-          from its US East region. Like any web server, it records each request: the IP
-          address it came from, the date and time, the address requested, the response
-          status and size, the browser and operating system string, and the referring page
-          if your browser sends one.
+          <strong className="text-foreground">Server logs.</strong> Our host, Vercel Inc.,
+          records each request the way any web server does: the IP address, the time, the
+          page requested, the response status, your browser and operating system string, and
+          the referring page if your browser sends one. These keep the site running and help
+          spot abuse. We do not build profiles from them or try to work out who you are.
         </p>
         <p>
-          These logs exist to keep the site running and to spot abuse. We do not use them
-          to build profiles, we do not combine them with anything else, and we do not try
-          to work out who you are from them.
-        </p>
-
-        <p className="pt-2 font-label text-foreground">Submitted projects</p>
-        <p>
-          If you suggest a project through{" "}
+          <strong className="text-foreground">Submitted projects.</strong> If you suggest a
+          project through{" "}
           <Link to="/submit" className="focus-ring text-foreground underline underline-offset-4">
             Submit
           </Link>
-          , we store what you typed about the project: its name, website address, category,
-          short and long description, pricing model and supported platforms.
+          , we store what you typed about the project — its name, address, category,
+          descriptions, pricing and platforms. A submission carries no IP address, no browser
+          string and no email address, so we cannot connect one to a person. Please don&rsquo;t
+          type personal details into the free-text fields.
         </p>
         <p>
-          A submission carries{" "}
-          <strong className="text-foreground">
-            no IP address, no browser string and no email address
-          </strong>
-          . We have no way to connect one to a person. If you volunteer personal details in
-          a free-text field, they are stored with the rest — please do not.
-        </p>
-
-        <p className="pt-2 font-label text-foreground">Saved tools</p>
-        <p>
-          Saving a listing writes its identifier to your browser&rsquo;s{" "}
-          <code className="font-mono text-xs">localStorage</code>. That list never leaves
-          your device and we cannot read it. Clearing your browser&rsquo;s site data
-          removes it.
+          <strong className="text-foreground">Saved tools.</strong> Saving a listing writes
+          its identifier to your browser&rsquo;s{" "}
+          <code className="font-mono text-xs">localStorage</code>. That list never leaves your
+          device and we cannot read it. Clearing your site data removes it.
         </p>
       </LegalSection>
 
-      <LegalSection heading="What we don't do">
-        <p>
-          We do not sell your personal information, and we do not share it for cross-context
-          behavioural advertising — the two things California&rsquo;s privacy law is mainly
-          concerned with. We run no advertising of any kind, and we have never done either
-          of these things. There is no revenue arrangement behind any listing, including the
-          three highlighted picks on the home page.
-        </p>
-        <p>
-          Because we do not sell or share, there is nothing for a Global Privacy Control
-          signal to opt you out of.
-        </p>
-      </LegalSection>
-
-      <LegalSection heading="Who else is involved">
+      <LegalSection heading="Who else sees anything">
         <p>
           <strong className="text-foreground">Vercel Inc.</strong> hosts the site and
-          therefore processes the server logs described above, under its own privacy terms
-          and a data processing agreement with us.
-        </p>
-        <p>
-          <strong className="text-foreground">xAI Corp.</strong> — the platform this site is
-          built on injects the script{" "}
+          therefore holds the server logs above.{" "}
+          <strong className="text-foreground">xAI Corp.</strong> receives your IP address
+          because the platform this site is built on injects{" "}
           <code className="font-mono text-xs">grok.com/grok-app-builder/extensions.js</code>{" "}
-          into every page it serves. Loading it sends your IP address to that domain. The
-          script is not part of our source code and is not something we use to observe you.
-          We are working on removing it.
+          into every page; it is not part of our code and we are working on removing it.
+          Nobody else receives anything.
         </p>
-        <p>Nobody else receives anything.</p>
-      </LegalSection>
-
-      <LegalSection heading="Links to other sites">
         <p>
-          Sending you to other people&rsquo;s projects is the entire point of this
-          directory. Once you follow a link, that site&rsquo;s own privacy practices apply
-          and we have no visibility into or control over them. The icons we show for listed
-          projects are copies served from our servers, so browsing the catalog does not
-          announce you to any of them.
+          We do not sell your personal information and do not share it for advertising. There
+          are no ad networks, no analytics and no trackers on this site. Fonts and the icons
+          of listed projects are served from our own servers, so loading a page contacts no
+          one else. Following a link to another project, of course, hands you over to that
+          site&rsquo;s own practices.
+        </p>
+        <p>
+          Because nothing is sold or shared, a Do Not Track or Global Privacy Control signal
+          has nothing to act on here. We do not respond to them differently.
         </p>
       </LegalSection>
 
       <LegalSection heading="Children">
         <p>
           This site is not directed to children under 13 and we do not knowingly collect
-          personal information from them. If you believe a child has sent us personal
-          information through the submission form, write to{" "}
-          <LegalValue value={OPERATOR.email} /> and we will delete it.
+          personal information from them.
         </p>
       </LegalSection>
 
-      <LegalSection heading="Your rights">
+      <LegalSection heading="Questions and requests">
         <p>
-          Depending on where you live — California, Colorado, Connecticut, Texas, Virginia
-          and a growing number of other states — you may have the right to know what
-          personal information a business holds about you, to have it corrected or deleted,
-          to receive a copy, to opt out of its sale or of targeted advertising, and not to
-          be treated worse for exercising any of that.
-        </p>
-        <p>
-          You are welcome to exercise these rights here regardless of your state, by writing
-          to <LegalValue value={OPERATOR.email} />. Two honest caveats: we hold almost
-          nothing about you, and because we do not record identifiers alongside submissions
-          we usually cannot tell which log lines, if any, are yours. Where we cannot verify
-          a request without collecting more information about you than we already have, we
-          will say so rather than ask for it.
-        </p>
-      </LegalSection>
-
-      <LegalSection heading="Visitors from the EU and UK">
-        <p>
-          This is a US site aimed at a general audience, not a service directed at the
-          European market. If you visit from the EU or the UK, the processing described
-          above still applies and your information is handled in the United States. You can
-          use the same contact address for any request about your data.
-        </p>
-      </LegalSection>
-
-      <LegalSection heading="Retention and security">
-        <p>
-          Server logs are kept only briefly by our host for operational and security
-          purposes and then discarded. Project details from submissions are kept for as long
-          as the listing remains in the catalog. The site is served over HTTPS.
+          Write to <LegalValue value={OPERATOR.email} /> to ask what we hold about you, or to
+          have something corrected or deleted. Two honest caveats: we hold almost nothing,
+          and because submissions carry no identifiers we usually cannot tell which log
+          lines, if any, are yours.
         </p>
       </LegalSection>
 
       <LegalSection heading="Changes">
         <p>
-          We will update this page whenever the actual processing changes — for example if a
-          new service is added. The version published here is the current one, and its date
-          is at the bottom.
+          If what we collect changes, we update this page and the date below. There is no
+          mailing list to notify, so the current version is always the one published here.
         </p>
       </LegalSection>
     </LegalPage>
